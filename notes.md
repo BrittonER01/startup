@@ -22,3 +22,6 @@ Interesting things I have learned about HTML
 ## React
 
 Interesting things I have learned about React
+
+## General Notes
+I love web programming!
