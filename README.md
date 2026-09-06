@@ -12,7 +12,7 @@ VitalLog will be a health and wellness application that allows users to track pe
 
 ### Elevator pitch
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+VitalLog helps create lasting healthy habits by making it effortless to log your meals, exercise, and sleep all in one place. Rather than keeping track of fitness journeys on your own, VitalLog allows you to connect with friends and celebrate your progress. In addition, VitalLog will encourage evidence backed practices by providing current news from nutrition and exercise science articles with links to the associated research papers.
 
 ### Design
 
