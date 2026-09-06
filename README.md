@@ -16,15 +16,33 @@ VitalLog helps create lasting healthy habits by making it effortless to log your
 
 ### Design
 
-![Design image](placeholder.png)
+Login and homescreen designs created with *Figma*
+![Design image](login.png)
+![Design image](homescreen.png)
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 ```mermaid
 sequenceDiagram
-    actor You
-    actor Website
-    You->>Website: Replace this with your design
+    actor User1 as User A
+    actor User2 as User B
+    participant Server
+    participant DB as Database
+
+    User1->>Server: Log in (POST /auth/login)
+    Server->>DB: Verify credentials
+    DB-->>Server: User authenticated
+    Server-->>User1: Return auth token
+
+    User1->>Server: Submit journal entry (POST /entries)
+    Server->>DB: Save entry
+    DB-->>Server: Entry saved
+    Server-->>User1: Confirm entry saved
+
+    Server->>User2: Push notification (WebSocket)
+    User2->>Server: Request updated feed (GET /feed)
+    Server->>DB: Fetch recent friend activity
+    DB-->>Server: Return entries
+    Server-->>User2: Send updated feed
 ```
 
 ### Key features
