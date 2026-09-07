@@ -47,20 +47,37 @@ sequenceDiagram
 
 ### Key features
 
-- Describe your key feature
-- Describe your key feature
-- Describe your key feature
+- Secure login over HTTPS
+- Ability to log daily entries for sleep exercise, and nutrition
+- Dashboard displaying recent entries and trends over time
+- Ability to edit or delete previously logged entries
+- Ability to send, accept, and remove friend connections
+- Real-time notifications when a friend logs a new entry
+- Feed of recent fitness and nutrition science paper headlines with links to original sources
+- Entries and connections are persistently stored per user
+
 
 ### Technologies
 
 I am going to use the required technologies in the following ways.
 
-- **HTML** - Description here
-- **CSS** - Description here
-- **React** - Description here
-- **Service** - Description here
-- **DB/Login** - Description here
-- **WebSocket** - Description here
+* **HTML** - Uses correct HTML structure for application. Multiple pages/views including login, dashboard, journal entry and article feed.
+
+* **CSS** -  Application styling that looks good on different screen sizes and uses good whitespace, color choice, and contrast.
+
+* **React** - Provides login, journal entry forms, dashboard views, friend feed display, notification bell, and routing between components.
+
+* **Service** - Backend service with endpoints for:
+   * login and registration
+   * creating, editing, and deleting journal entries
+   * sending, accepting, and removing friend connections
+   * retrieving friend feed activity
+   * retrieving recent science paper headlines
+
+* **DB/Login** -  Store users, journal entries, connections, and articles in a database. Register and login users. Credentials securely stored in database. 
+
+- **WebSocket** - As a user logs a new entry, friends connected to them receive a real-time notification, and the friend feed updates live without needing a page refresh.
+
 
 ## 🚀 Specification Deliverable
 
