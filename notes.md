@@ -13,7 +13,12 @@ This file represents what I have learned about web programming.
 
 ## AWS
 
-Interesting things I have learned about AWS
+Public IP for website: 34.226.37.185
+ssh commands for logging into server
+- ssh -i DoNotCommit/MasterKey.pem ubuntu@34.226.37.185
+
+Command for leaving server
+* exit
 
 ## HTML
 
