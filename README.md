@@ -76,7 +76,10 @@ I am going to use the required technologies in the following ways.
 
 * **DB/Login** -  Store users, journal entries, connections, and articles in a database. Register and login users. Credentials securely stored in database. 
 
-- **WebSocket** - As a user logs a new entry, friends connected to them receive a real-time notification, and the friend feed updates live without needing a page refresh.
+* **WebSocket** - As a user logs a new entry, friends connected to them receive a real-time notification, and the friend feed updates live without needing a page refresh.
+
+* **3rd Party API** - I will use the [PubMed API](https://www.ncbi.nlm.nih.gov/home/develop/api/) (via NCBI's E-utilities) to retrieve recent nutrition and exercise science research headlines. My backend service will periodically query the API for recent articles matching relevant search terms, store simplified results (title, authors, publish date, and link) in my `articles` collection, and serve them to the frontend feed.
+
 
 
 ## 🚀 Specification Deliverable
@@ -86,12 +89,12 @@ I am going to use the required technologies in the following ways.
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] I completed the prerequisites for this deliverable (Git commit requirement)
-- [ ] Proper use of Markdown
-- [ ] A concise and compelling elevator pitch
-- [ ] Description of key features
-- [ ] Description of how you will use each technology including your 3rd party API and use of WebSocket
-- [ ] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references.
+- [x] I completed the prerequisites for this deliverable (Git commit requirement) - Created my GitHub repo, cloned it locally, and made my initial commits following the required Git setup.
+- [x] Proper use of Markdown - Used headers, bullet lists, bold text, images, and a fenced Mermaid diagram to structure this README.
+- [x] A concise and compelling elevator pitch - Wrote a short pitch describing VitalLog's purpose and core value.
+- [x] Description of key features - Listed the key features my application will support.
+- [x] Description of how you will use each technology including your 3rd party API and use of WebSocket - Described how I will use HTML, CSS, React, Service, DB/Login, WebSocket, and the PubMed 3rd party API.
+- [x] One or more rough sketches of your application. Images must be embedded in this file using Markdown image references. - Embedded my Figma login and homescreen designs as images.Markdown image references.
 
 ## 🚀 AWS deliverable
 
