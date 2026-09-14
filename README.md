@@ -1,4 +1,4 @@
-# VitalLog (place holder for now)
+# VitalLog
 
 [My Notes](notes.md)
 
@@ -100,9 +100,9 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] **Rented EC2 server** - I did not complete this part of the deliverable.
-- [ ] **Leased domain name** - I did not complete this part of the deliverable.
-- [ ] **Server accessible** from my domain: [https://yourdomainnamehere.click](https://yourdomainnamehere.click) - I did not complete this part of the deliverable.
+- [x] **Rented EC2 server** - I completed this part of the deliverable by renting a EC2 server.
+- [x] **Leased domain name** - I leased a domain name for my server. 
+- [x] **Server accessible** from my domain: [https://vitallog.click] - I completed this deliverable and my server is accessible.
 
 ## 🚀 HTML deliverable
 
