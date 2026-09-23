@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VitalLog — Dashboard</title>
+</head>
+<body>
+  <header>
+    <h1>VitalLog</h1>
+    <p>Logged in as: <span id="current-user">Guest</span></p>
+    <nav>
+      <menu>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="login.html">Login / Register</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="friends.html">Friends</a></li>
+        <li><a href="articles.html">Research Feed</a></li>
+      </menu>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <h2>Log a New Entry</h2>
+      <form action="#" method="post">
+        <label for="entry-type">Type</label>
+        <select id="entry-type" name="type">
+          <option value="sleep">Sleep</option>
+          <option value="exercise">Exercise</option>
+          <option value="nutrition">Nutrition</option>
+        </select>
+
+        <label for="entry-value">Value</label>
+        <input type="text" id="entry-value" name="value" placeholder="example data entry" />
+
+        <label for="entry-notes">Notes</label>
+        <textarea id="entry-notes" name="notes" placeholder="Optional notes"></textarea>
+
+        <button type="submit">Save Entry</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Today's Snapshot</h2>
+      <figure>
+        <svg width="300" height="150" viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="10" width="80" height="100" fill="MediumSeaGreen" />
+          <text x="20" y="130">Sleep</text>
+          <rect x="110" y="40" width="80" height="70" fill="DarkOrange" />
+          <text x="115" y="130">Exercise</text>
+          <rect x="210" y="60" width="80" height="50" fill="DarkViolet" />
+          <text x="205" y="130">Nutrition</text>
+        </svg>
+        <figcaption>Placeholder chart of today's logged activity</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h2>Your Entry History</h2>
+      <p>Data below is stored in and retrieved from the database.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Value</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody id="entry-history">
+          <tr>
+            <td>2026-09-20</td>
+            <td>Sleep</td>
+            <td>7.5 hours</td>
+            <td>Woke up once</td>
+          </tr>
+          <tr>
+            <td>2026-09-20</td>
+            <td>Exercise</td>
+            <td>30 min run</td>
+            <td>Felt strong</td>
+          </tr>
+          <tr>
+            <td>2026-09-19</td>
+            <td>Nutrition</td>
+            <td>2100 kcal</td>
+            <td>-</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Brit Richardson — CS 260 Startup Project</p>
+    <p>
+      <a href="https://github.com/BrittonER01/startup" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+    </p>
+  </footer>
+</body>
+</html>
