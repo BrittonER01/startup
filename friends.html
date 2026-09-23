@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VitalLog — Friends</title>
+</head>
+<body>
+  <header>
+    <h1>VitalLog</h1>
+    <p>Logged in as: <span id="current-user">Guest</span></p>
+    <nav>
+      <menu>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="login.html">Login / Register</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="friends.html">Friends</a></li>
+        <li><a href="articles.html">Research Feed</a></li>
+      </menu>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <h2>Add a Friend</h2>
+      <form action="#" method="post">
+        <label for="friend-username">Username</label>
+        <input type="text" id="friend-username" name="username" placeholder="username to add" />
+        <button type="submit">Send Request</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Your Friends</h2>
+      <ul id="friends-list">
+        <li>
+          <img src="placeholder.png" alt="Profile picture" />
+          David Kim
+        </li>
+        <li>
+          <img src="placeholder.png" alt="Profile picture" />
+          Nancy Lee
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Live Friend Activity</h2>
+      <p>
+        This feed updates in real time over a WebSocket connection whenever a friend
+        logs a new entry.
+      </p>
+      <ul id="activity-feed">
+        <li>David Kim logged 8 hours of sleep - just now</li>
+        <li>Nancy Lee logged a 5k run - 12 minutes ago</li>
+        <li>Waiting for more live updates&hellip;</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Brit Richardson — CS 260 Startup Project</p>
+    <p>
+      <a href="https://github.com/BrittonER01/startup" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+    </p>
+  </footer>
+</body>
+</html>
