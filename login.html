@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VitalLog — Login</title>
+</head>
+<body>
+  <header>
+    <h1>VitalLog</h1>
+    <nav>
+      <menu>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="login.html">Login / Register</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="friends.html">Friends</a></li>
+        <li><a href="articles.html">Research Feed</a></li>
+      </menu>
+    </nav>
+  </header>
+
+  <main>
+    <section>
+      <h2>Welcome back</h2>
+      <p>Currently logged in as: <span id="current-user">Guest</span></p>
+    </section>
+
+    <section>
+      <h3>Login</h3>
+      <form action="#" method="post">
+        <label for="login-username">Username</label>
+        <input type="text" id="login-username" name="username" placeholder="your username" required />
+
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" name="password" placeholder="your password" required />
+
+        <button type="submit">Login</button>
+      </form>
+    </section>
+
+    <section>
+      <h3>Create an Account</h3>
+      <form action="#" method="post">
+        <label for="register-username">Username</label>
+        <input type="text" id="register-username" name="username" placeholder="choose a username" required />
+
+        <label for="register-email">Email</label>
+        <input type="email" id="register-email" name="email" placeholder="you@example.com" required />
+
+        <label for="register-password">Password</label>
+        <input type="password" id="register-password" name="password" placeholder="choose a password" required />
+
+        <button type="submit">Create Account</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Brit Richardson — CS 260 Startup Project</p>
+    <p>
+      <a href="https://github.com/BrittonER01/startup" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+    </p>
+  </footer>
+</body>
+</html>
