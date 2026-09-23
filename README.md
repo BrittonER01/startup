@@ -111,7 +111,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 - [x] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
 - [x] **HTML pages** - Created five pages representing each main component of the application: `index.html` (home), `login.html` (authentication), `dashboard.html` (entry logging and history), `friends.html` (social connections and activity feed), and `articles.html` (research headlines).
 - [x] **Proper HTML element usage** - Each page uses semantic structure with `header`, `nav`, `main`, `section`, and `footer` elements, along with appropriate tags like `form`, `table`, `article`, and `figure` where relevant.
-- [x] **Links** - Every page includes a nav menu linking to all other pages, plus a link to my GitHub repository in the header and footer.
+- [x] **Links** - Every page includes a nav menu linking to all other pages, plus a link to my GitHub repository in the footer.
 - [x] **Text** - Added descriptive textual content on each page explaining what VitalLog does and what each section represents (app overview, feature list, entry descriptions, article summaries, etc).
 - [x] **3rd party API placeholder** - `articles.html` includes placeholder article entries representing headlines that will be pulled from PubMed via the NCBI E-utilities API.
 - [x] **Images** - `index.html` displays my app logo (`login.png`); `dashboard.html` includes an SVG placeholder chart; `friends.html` includes placeholder profile images for each friend.
