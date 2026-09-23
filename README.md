@@ -108,16 +108,16 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
-- [ ] **HTML pages** - I did not complete this part of the deliverable.
-- [ ] **Proper HTML element usage** - I did not complete this part of the deliverable.
-- [ ] **Links** - I did not complete this part of the deliverable.
-- [ ] **Text** - I did not complete this part of the deliverable.
-- [ ] **3rd party API placeholder** - I did not complete this part of the deliverable.
-- [ ] **Images** - I did not complete this part of the deliverable.
-- [ ] **Login placeholder** - I did not complete this part of the deliverable.
-- [ ] **DB data placeholder** - I did not complete this part of the deliverable.
-- [ ] **WebSocket placeholder** - I did not complete this part of the deliverable.
+- [x] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
+- [x] **HTML pages** - Created five pages representing each main component of the application: `index.html` (home), `login.html` (authentication), `dashboard.html` (entry logging and history), `friends.html` (social connections and activity feed), and `articles.html` (research headlines).
+- [x] **Proper HTML element usage** - Each page uses semantic structure with `header`, `nav`, `main`, `section`, and `footer` elements, along with appropriate tags like `form`, `table`, `article`, and `figure` where relevant.
+- [x] **Links** - Every page includes a nav menu linking to all other pages, plus a link to my GitHub repository in the header and footer.
+- [x] **Text** - Added descriptive textual content on each page explaining what VitalLog does and what each section represents (app overview, feature list, entry descriptions, article summaries, etc).
+- [x] **3rd party API placeholder** - `articles.html` includes placeholder article entries representing headlines that will be pulled from PubMed via the NCBI E-utilities API.
+- [x] **Images** - `index.html` displays my app logo (`login.png`); `dashboard.html` includes an SVG placeholder chart; `friends.html` includes placeholder profile images for each friend.
+- [x] **Login placeholder** - `login.html` includes both a login form and a registration form, and a username display (`Logged in as: Guest`) appears in the header of every page.
+- [x] **DB data placeholder** - `dashboard.html` includes a table of logged entries (sleep, exercise, nutrition) representing data that will be stored in and retrieved from the database.
+- [x] **WebSocket placeholder** - `friends.html` includes a live activity feed section representing real-time updates received over a WebSocket connection when friends log new entries.
 
 ## 🚀 CSS deliverable
 
