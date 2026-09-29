@@ -35,40 +35,42 @@
   </header>
 
   <main>
-    <section>
-      <h2>Log a New Entry</h2>
-      <form action="#" method="post">
-        <label for="entry-type">Type</label>
-        <select id="entry-type" name="type">
-          <option value="sleep">Sleep</option>
-          <option value="exercise">Exercise</option>
-          <option value="nutrition">Nutrition</option>
-        </select>
+    <div class="dashboard-grid">
+      <section>
+        <h2>Log a New Entry</h2>
+        <form action="#" method="post">
+          <label for="entry-type">Type</label>
+          <select id="entry-type" name="type">
+            <option value="sleep">Sleep</option>
+            <option value="exercise">Exercise</option>
+            <option value="nutrition">Nutrition</option>
+          </select>
 
-        <label for="entry-value">Value</label>
-        <input type="text" id="entry-value" name="value" placeholder="example data entry" />
+          <label for="entry-value">Value</label>
+          <input type="text" id="entry-value" name="value" placeholder="example data entry" />
 
-        <label for="entry-notes">Notes</label>
-        <textarea id="entry-notes" name="notes" placeholder="Optional notes"></textarea>
+          <label for="entry-notes">Notes</label>
+          <textarea id="entry-notes" name="notes" placeholder="Optional notes"></textarea>
 
-        <button type="submit">Save Entry</button>
-      </form>
-    </section>
+          <button type="submit">Save Entry</button>
+        </form>
+      </section>
 
-    <section>
-      <h2>Today's Snapshot</h2>
-      <figure>
-        <svg width="300" height="150" viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
-          <rect x="10" y="10" width="80" height="100" fill="MediumSeaGreen" />
-          <text x="20" y="130">Sleep</text>
-          <rect x="110" y="40" width="80" height="70" fill="DarkOrange" />
-          <text x="115" y="130">Exercise</text>
-          <rect x="210" y="60" width="80" height="50" fill="DarkViolet" />
-          <text x="205" y="130">Nutrition</text>
-        </svg>
-        <figcaption>Placeholder chart of today's logged activity</figcaption>
-      </figure>
-    </section>
+      <section>
+        <h2>Today's Snapshot</h2>
+        <figure>
+          <svg width="300" height="150" viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="10" width="80" height="100" fill="MediumSeaGreen" />
+            <text x="20" y="130">Sleep</text>
+            <rect x="110" y="40" width="80" height="70" fill="DarkOrange" />
+            <text x="115" y="130">Exercise</text>
+            <rect x="210" y="60" width="80" height="50" fill="DarkViolet" />
+            <text x="205" y="130">Nutrition</text>
+          </svg>
+          <figcaption>Placeholder chart of today's logged activity</figcaption>
+        </figure>
+      </section>
+    </div>
 
     <section>
       <h2>Your Entry History</h2>
