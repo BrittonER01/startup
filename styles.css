@@ -442,3 +442,30 @@ tbody tr:nth-child(even) {
   height: 32px;
   border-radius: 50%;
 }
+
+/* ---------- Articles grid ---------- */
+.article-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--gap);
+}
+ 
+.article-grid article {
+  background: var(--paper-raised);
+  border: 1px solid var(--sage-line);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  display: grid;
+  gap: 0.4rem;
+  align-content: start;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+ 
+.article-grid article:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(22, 36, 28, 0.08);
+}
+ 
+.article-grid time {
+  color: var(--ink-soft);
+}
