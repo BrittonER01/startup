@@ -285,11 +285,13 @@ form {
   gap: 0.35rem;
 }
  
-label {
+label {  
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--ink-soft);
   margin-top: 0.6rem;
+  display: block;
+  margin-bottom: 0.25rem;
 }
  
 label:first-of-type {
@@ -499,4 +501,12 @@ tbody tr:nth-child(even) {
  
 .article-grid time {
   color: var(--ink-soft);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 720px) {
+  .site-header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
