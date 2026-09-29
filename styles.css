@@ -284,3 +284,74 @@ footer a {
   border-radius: var(--radius);
   padding: 1.5rem;
 }
+
+/* ---------- Forms ---------- */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--gap);
+}
+ 
+form {
+  background: var(--paper-raised);
+  border: 1px solid var(--sage-line);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  display: grid;
+  gap: 0.35rem;
+}
+ 
+label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  margin-top: 0.6rem;
+}
+ 
+label:first-of-type {
+  margin-top: 0;
+}
+ 
+input,
+select,
+textarea {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--sage-line);
+  border-radius: 6px;
+  background: var(--paper);
+  color: var(--ink);
+  width: 100%;
+}
+ 
+textarea {
+  min-height: 4.5rem;
+  resize: vertical;
+}
+ 
+input:focus,
+select:focus,
+textarea:focus {
+  outline: 2px solid var(--pulse);
+  outline-offset: 1px;
+  border-color: var(--pulse);
+}
+ 
+button {
+  justify-self: start;
+  margin-top: 0.75rem;
+  padding: 0.6rem 1.4rem;
+  background: var(--pulse);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+ 
+button:hover {
+  background: var(--pulse-deep);
+}
