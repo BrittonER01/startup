@@ -469,3 +469,16 @@ tbody tr:nth-child(even) {
 .article-grid time {
   color: var(--ink-soft);
 }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 720px) {
+  .hero,
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+ 
+  .site-header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
