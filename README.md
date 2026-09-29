@@ -125,7 +125,7 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 - [x] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
 - [x] **Visually appealing colors and layout. No overflowing elements.** - I added forest green and pulse coral to stylize my fitness website
-- [x] **Use of a CSS framework** - I used bootstrap as a framework which is linked in my html files. I used its pre-built containers to add structure to my pages. 
+- [x] **Use of a CSS framework** - I used bootstrap as a framework which is linked in my html files. I used its pre-built container/row/col system.
 - [x] **All visual elements styled using CSS** - All visual elements are stylized with css
 - [x] **Responsive to window resizing using flexbox and/or grid display** - Elements responsive to resizing and mobile viewing
 - [x] **Use of a imported font** - I imported Fraunces for headers and Work Sans for body text
