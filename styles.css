@@ -431,11 +431,11 @@ tbody tr:nth-child(even) {
     flex-shrink: 0;
 }
 
-.friend-list li:nth-child(even) .avatar {
+.friends-list li:nth-child(even) .avatar {
     background: var(--pulse);
 }
 
-* ---------- Activity feed ---------- */
+/* ---------- Activity feed ---------- */
 .activity-feed {
   list-style: none;
   margin: 0;
@@ -499,17 +499,4 @@ tbody tr:nth-child(even) {
  
 .article-grid time {
   color: var(--ink-soft);
-}
-
-/* ---------- Responsive ---------- */
-@media (max-width: 720px) {
-  .hero,
-  .dashboard-grid {
-    grid-template-columns: 1fr;
-  }
- 
-  .site-header-inner {
-    flex-direction: column;
-    align-items: flex-start;
-  }
 }
