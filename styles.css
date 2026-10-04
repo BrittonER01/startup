@@ -182,6 +182,25 @@ section {
   right: 0;
 }
 
+.nav-menu a.active {
+  color: var(--paper);
+  font-weight: 600;
+}
+ 
+.nav-menu a.active::after {
+  right: 0;
+  background: var(--sage);
+}
+
+.nav-menu a.active {
+  color: var(--paper);
+}
+
+.nav-menu a.active:after {
+  right: 0;
+  background: var(--paper);
+}
+
 /* ---------- Footer ---------- */
 footer {
   border-top: 1px solid var(--sage-line);
