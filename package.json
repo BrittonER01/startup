@@ -8,19 +8,18 @@
     "build": "vite build",
     "preview": "vite preview"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/BrittonER01/startup.git"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/BrittonER01/startup/issues"
-  },
-  "homepage": "https://github.com/BrittonER01/startup#readme",
   "devDependencies": {
     "vite": "^8.3.3"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.8",
+    "react": "^19.3.0",
+    "react-bootstrap": "^2.10.10",
+    "react-dom": "^19.3.0",
+    "react-router-dom": "^7.18.4"
   }
 }
