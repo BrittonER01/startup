@@ -12,7 +12,7 @@ import { Friends } from './friends/friends';
 export default function App() {
   return (
     <BrowserRouter>
-      <div className="body">
+      <div className="app-shell">
         <header className="site-header">
           <div className="site-header-inner">
             <div className="brand">

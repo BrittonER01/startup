@@ -529,3 +529,17 @@ tbody tr:nth-child(even) {
     align-items: flex-start;
   }
 }
+
+#root {
+  min-height: 100vh;
+}
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-shell > main {
+  flex: 1;
+}
