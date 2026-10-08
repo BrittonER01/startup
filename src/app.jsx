@@ -16,7 +16,7 @@ export default function App() {
         <header className="site-header">
           <div className="site-header-inner">
             <div className="brand">
-              <img src="/logo.png" alt="VitalLog logo" />
+              <img src="logo.png" alt="VitalLog logo" />
               <div>
                 <h1>VitalLog</h1>
                 <p className="session-status">Built by Brit Richardson</p>

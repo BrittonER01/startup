@@ -538,6 +538,7 @@ tbody tr:nth-child(even) {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  background: var(--paper);
 }
 
 .app-shell > main {
