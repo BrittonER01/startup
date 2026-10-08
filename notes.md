@@ -20,6 +20,11 @@ ssh commands for logging into server
 Command for leaving server
 * exit
 
+Command for deploying files to server:
+```
+./deployFiles.sh -k ~/CS260/DoNotCommit/MasterKey.pem -h vitallog.click -s startup
+```
+
 ## HTML
 
 Interesting things I have learned about HTML
