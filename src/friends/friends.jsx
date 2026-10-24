@@ -11,13 +11,29 @@ function clockLabel(date) {
 }
 
 export function Friends({ user }) {
-  const [friends, setFriends] = useState(() => readStorage(STORAGE_KEYS.friends, INITIAL_FRIENDS));
-  const [activity, setActivity] = useState(() => readStorage(STORAGE_KEYS.activity, INITIAL_ACTIVITY));
+  const [friends, setFriends] = useState(() => {
+    const saved = readStorage(STORAGE_KEYS.friends, INITIAL_FRIENDS);
+
+    return Array.isArray(saved) ? saved : INITIAL_FRIENDS;
+  });
+
+  const [activity, setActivity] = useState(() => {
+    const saved = readStorage(STORAGE_KEYS.activity, INITIAL_ACTIVITY);
+
+    return Array.isArray(saved) ? saved : INITIAL_ACTIVITY;
+  });
+  const safeFriends = Array.isArray(friends) ? friends : [];
+  const safeActivity = Array.isArray(activity) ? activity : [];
   const [username, setUsername] = useState('');
   const [feedback, setFeedback] = useState('');
 
-  useEffect(() => { writeStorage(STORAGE_KEYS.friends, friends); }, [friends]);
-  useEffect(() => { writeStorage(STORAGE_KEYS.activity, activity); }, [activity]);
+  useEffect(() => {
+    writeStorage(STORAGE_KEYS.friends, safeFriends);
+  }, [safeFriends]);
+
+  useEffect(() => {
+    writeStorage(STORAGE_KEYS.activity, safeActivity);
+  }, [safeActivity]);
 
   useEffect(() => {
     // Simulate server-pushed WebSocket events for this deliverable; clear the timer on unmount.
@@ -38,16 +54,23 @@ export function Friends({ user }) {
       setFeedback('Enter a username with at least 2 characters.');
       return;
     }
-    if (cleanName.toLowerCase() === user?.username.toLowerCase()) {
+    if (cleanName.toLowerCase() === user?.username?.toLowerCase()) {
       setFeedback("You can't add your own account.");
       return;
     }
-    if (friends.some((friend) => friend.username.toLowerCase() === cleanName.toLowerCase())) {
-      setFeedback('That person is already in your friends list or has a pending request.');
+    if (
+      safeFriends.some(
+        (friend) =>
+          friend?.username?.toLowerCase() === cleanName.toLowerCase()
+      )
+    ) {
+      setFeedback(
+        'That person is already in your friends list or has a pending request.'
+      );
       return;
     }
     const displayName = cleanName.replace(/[._-]+/g, ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
-    setFriends((items) => [...items, { id: `friend-${Date.now()}`, username: cleanName, name: displayName, status: 'pending' }]);
+    setFriends((items) => [...(Array.isArray(items) ? items : []), { id: `friend-${Date.now()}`, username: cleanName, name: displayName, status: 'pending' }]);
     setUsername('');
     setFeedback(`Friend request sent to ${displayName}. This request is mocked locally.`);
   }
@@ -62,8 +85,13 @@ export function Friends({ user }) {
     setFeedback('Friend removed from this browser.');
   }
 
-  const connected = friends.filter((friend) => friend.status === 'friend');
-  const pending = friends.filter((friend) => friend.status === 'pending');
+  const connected = safeFriends.filter(
+    (friend) => friend?.status === 'friend'
+  );
+
+  const pending = safeFriends.filter(
+    (friend) => friend?.status === 'pending'
+  );
 
   return (
     <main className="container body">
@@ -93,7 +121,7 @@ export function Friends({ user }) {
           <section className="activity-panel">
             <div className="section-heading-row"><div><p className="eyebrow">LIVE DEMO FEED</p><h3>Recent activity</h3></div><span className="live-indicator"><span /> Simulated</span></div>
             <p className="small-print">In a later deliverable, a WebSocket service can replace this timer-based feed.</p>
-            <ul className="activity-feed">{activity.map((item) => <li key={item.id}><span className="activity-dot" aria-hidden="true" /><div><p><strong>{item.from}</strong> {item.message}</p><time>{item.time}</time></div></li>)}</ul>
+            <ul className="activity-feed">{safeActivity.map((item) => <li key={item.id}><span className="activity-dot" aria-hidden="true" /><div><p><strong>{item.from}</strong> {item.message}</p><time>{item.time}</time></div></li>)}</ul>
           </section>
         </div>
       </section>
