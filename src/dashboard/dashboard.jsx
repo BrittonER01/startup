@@ -85,8 +85,8 @@ export function Dashboard({ user }) {
                 return (
                   <div className={`metric-card metric-${type}`} key={type}>
                     <div className="metric-top"><span>{config.label}</span><strong>{displayed} <small>{config.shortUnit}</small></strong></div>
-                    <div className="metric-track" role="progressbar" aria-label={`${config.label} today`} aria-valuemin="0" aria-valuemax={BAR_LIMITS[type]} aria-valuenow={Math.min(amount, BAR_LIMITS[type])}><span style={{ width: `${width}%` }} /></div>
-                    <small className="metric-helper">{type === 'sleep' ? 'Daily guide: 8 h' : type === 'exercise' ? 'Movement logged today' : 'Food energy logged today'}</small>
+                    <div className="metric-track" role="progressbar" aria-label={`${config.label} today`} aria-valuemin="0" aria-valuemax={BAR_LIMITS[type]} ariavaluenow={Math.min(amount, BAR_LIMITS[type])}><span style={{ width: `${width}%` }} /></div>
+                    <small className="metric-helper">{type === 'sleep' ? 'Sleep logged today' : type === 'exercise' ? 'Movement logged today' : 'Calories logged today'}</small>
                   </div>
                 );
               })}
