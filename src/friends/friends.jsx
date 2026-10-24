@@ -17,6 +17,19 @@ export function Friends({ user }) {
   const [feedback, setFeedback] = useState('');
 
   useEffect(() => { writeStorage(STORAGE_KEYS.friends, friends); }, [friends]);
+  useEffect(() => { writeStorage(STORAGE_KEYS.activity, activity); }, [activity]);
+
+  useEffect(() => {
+    // Simulate server-pushed WebSocket events for this deliverable; clear the timer on unmount.
+    let eventIndex = 0;
+    const timer = window.setInterval(() => {
+      const event = MOCK_ACTIVITY_EVENTS[eventIndex % MOCK_ACTIVITY_EVENTS.length];
+      eventIndex += 1;
+      const newItem = { id: `live-${Date.now()}`, from: event.from, message: event.message, time: clockLabel(new Date()) };
+      setActivity((items) => [newItem, ...items].slice(0, 8));
+    }, 15000);
+    return () => window.clearInterval(timer);
+  }, []);
 
   function addFriend(event) {
     event.preventDefault();
@@ -75,6 +88,13 @@ export function Friends({ user }) {
             {connected.length ? <ul className="friends-list">{connected.map((friend) => <li key={friend.id}><span className="avatar" aria-hidden="true">{initials(friend.name)}</span><span className="friend-name">{friend.name}<small>@{friend.username}</small></span><button className="button-text" type="button" onClick={() => removeFriend(friend.id)}>Remove</button></li>)}</ul> : <div className="empty-state"><p>No connected friends yet. Add someone above.</p></div>}
           </div>
           {!!pending.length && <div className="friend-group"><div className="section-heading-row"><h3>Pending requests</h3><span className="count-pill">{pending.length}</span></div><ul className="friends-list">{pending.map((friend) => <li key={friend.id}><span className="avatar" aria-hidden="true">{initials(friend.name)}</span><span className="friend-name">{friend.name}<small>Request pending</small></span><button type="button" className="button-quiet" onClick={() => acceptRequest(friend.id)}>Accept</button><button type="button" className="button-text" onClick={() => removeFriend(friend.id)}>Cancel</button></li>)}</ul></div>}
+        </div>
+        <div className="col-lg-7">
+          <section className="activity-panel">
+            <div className="section-heading-row"><div><p className="eyebrow">LIVE DEMO FEED</p><h3>Recent activity</h3></div><span className="live-indicator"><span /> Simulated</span></div>
+            <p className="small-print">In a later deliverable, a WebSocket service can replace this timer-based feed.</p>
+            <ul className="activity-feed">{activity.map((item) => <li key={item.id}><span className="activity-dot" aria-hidden="true" /><div><p><strong>{item.from}</strong> {item.message}</p><time>{item.time}</time></div></li>)}</ul>
+          </section>
         </div>
       </section>
     </main>

@@ -48,7 +48,9 @@ img {
   display: block;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   font-family: var(--font-display);
   color: var(--forest-deep);
   line-height: 1.15;
@@ -106,7 +108,7 @@ section {
   color: var(--paper);
   padding: 1.25rem 1.5rem;
 }
- 
+
 .site-header-inner {
   max-width: var(--max-width);
   margin: 0 auto;
@@ -116,36 +118,36 @@ section {
   justify-content: space-between;
   gap: 0.75rem 2rem;
 }
- 
+
 .brand {
   display: flex;
   align-items: center;
   gap: 0.6rem;
 }
- 
+
 .brand img {
   width: 32px;
   height: 32px;
   border-radius: 6px;
 }
- 
+
 .site-header h1 {
   color: var(--paper);
   font-size: 1.4rem;
   margin: 0;
 }
- 
+
 .session-status {
   font-size: 0.85rem;
   color: var(--sage);
   margin: 0;
 }
- 
+
 .session-status .username {
   color: var(--paper);
   font-weight: 600;
 }
- 
+
 .nav-menu {
   list-style: none;
   display: flex;
@@ -154,7 +156,7 @@ section {
   margin: 0;
   padding: 0;
 }
- 
+
 .nav-menu a {
   color: var(--sage);
   text-decoration: none;
@@ -162,7 +164,7 @@ section {
   position: relative;
   padding-bottom: 3px;
 }
- 
+
 .nav-menu a::after {
   content: "";
   position: absolute;
@@ -173,11 +175,11 @@ section {
   background: var(--pulse);
   transition: right 0.2s ease;
 }
- 
+
 .nav-menu a:hover {
   color: var(--paper);
 }
- 
+
 .nav-menu a:hover::after {
   right: 0;
 }
@@ -186,7 +188,7 @@ section {
   color: var(--paper);
   font-weight: 600;
 }
- 
+
 .nav-menu a.active::after {
   right: 0;
   background: var(--sage);
@@ -303,8 +305,8 @@ form {
   display: grid;
   gap: 0.35rem;
 }
- 
-label {  
+
+label {
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--ink-soft);
@@ -312,11 +314,11 @@ label {
   display: block;
   margin-bottom: 0.25rem;
 }
- 
+
 label:first-of-type {
   margin-top: 0;
 }
- 
+
 input,
 select,
 textarea {
@@ -329,12 +331,12 @@ textarea {
   color: var(--ink);
   width: 100%;
 }
- 
+
 textarea {
   min-height: 4.5rem;
   resize: vertical;
 }
- 
+
 input:focus,
 select:focus,
 textarea:focus {
@@ -342,7 +344,7 @@ textarea:focus {
   outline-offset: 1px;
   border-color: var(--pulse);
 }
- 
+
 button {
   justify-self: start;
   margin-top: 0.75rem;
@@ -356,7 +358,7 @@ button {
   cursor: pointer;
   transition: background 0.15s ease;
 }
- 
+
 button:hover {
   background: var(--pulse-deep);
 }
@@ -370,7 +372,7 @@ figure {
   padding: 1.25rem;
   text-align: center;
 }
- 
+
 figcaption {
   font-size: 0.85rem;
   color: var(--ink-soft);
@@ -383,33 +385,34 @@ figcaption {
   border: 1px solid var(--sage-line);
   border-radius: var(--radius);
 }
- 
+
 table {
   width: 100%;
   border-collapse: collapse;
   background: var(--paper-raised);
 }
- 
+
 caption {
   text-align: left;
   font-weight: 600;
   padding: 0.9rem 1rem 0.5rem;
   color: var(--forest-deep);
 }
- 
-th, td {
+
+th,
+td {
   text-align: left;
   padding: 0.65rem 1rem;
   font-size: 0.92rem;
   border-top: 1px solid var(--sage-line);
 }
- 
+
 th {
   color: var(--ink-soft);
   font-size: 0.8rem;
   text-transform: none;
 }
- 
+
 tbody tr:nth-child(even) {
   background: var(--paper);
 }
@@ -423,7 +426,7 @@ tbody tr:nth-child(even) {
   flex-wrap: wrap;
   gap: 0.75rem;
 }
- 
+
 .friends-list li {
   display: flex;
   align-items: center;
@@ -436,24 +439,24 @@ tbody tr:nth-child(even) {
 }
 
 /* ---------- Avatar ---------- */
- 
-.avatar{
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-display);
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--paper);
-    background: var(--forest);
-    flex-shrink: 0;
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--paper);
+  background: var(--forest);
+  flex-shrink: 0;
 }
 
 .friends-list li:nth-child(even) .avatar {
-    background: var(--pulse);
+  background: var(--pulse);
 }
 
 /* ---------- Activity feed ---------- */
@@ -463,13 +466,13 @@ tbody tr:nth-child(even) {
   padding: 0;
   border-left: 3px solid var(--sage-line);
 }
- 
+
 .activity-feed li {
   position: relative;
   padding: 0.5rem 0 0.5rem 1.2rem;
   font-size: 0.95rem;
 }
- 
+
 .activity-feed li::before {
   content: "";
   position: absolute;
@@ -480,15 +483,15 @@ tbody tr:nth-child(even) {
   border-radius: 50%;
   background: var(--sage);
 }
- 
+
 .activity-feed li:first-child::before {
   background: var(--pulse);
 }
- 
+
 .activity-feed li:first-child {
   font-weight: 600;
 }
- 
+
 /* One genuinely unique element gets an ID selector: this is the single
    entry-history table on the dashboard, not a reusable component. */
 #entry-history tr:last-child td {
@@ -501,7 +504,7 @@ tbody tr:nth-child(even) {
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: var(--gap);
 }
- 
+
 .article-grid article {
   background: var(--paper-raised);
   border: 1px solid var(--sage-line);
@@ -512,12 +515,12 @@ tbody tr:nth-child(even) {
   align-content: start;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
- 
+
 .article-grid article:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 20px rgba(22, 36, 28, 0.08);
 }
- 
+
 .article-grid time {
   color: var(--ink-soft);
 }
@@ -541,7 +544,7 @@ tbody tr:nth-child(even) {
   background: var(--paper);
 }
 
-.app-shell > main {
+.app-shell>main {
   flex: 1;
 }
 
@@ -593,7 +596,7 @@ button:disabled {
   letter-spacing: -0.035em;
 }
 
-.hero > div > p:not(.eyebrow):not(.welcome-note) {
+.hero>div>p:not(.eyebrow):not(.welcome-note) {
   max-width: 54ch;
   color: var(--ink-soft);
   font-size: 1.08rem;
@@ -691,7 +694,7 @@ button:disabled {
   max-width: 760px;
 }
 
-.page-intro > p:not(.eyebrow) {
+.page-intro>p:not(.eyebrow) {
   color: var(--ink-soft);
 }
 
@@ -704,7 +707,7 @@ button:disabled {
   background: var(--paper-raised);
 }
 
-.form-panel > h3,
+.form-panel>h3,
 .snapshot-panel h3,
 .activity-panel h3 {
   margin-bottom: 1rem;
@@ -931,4 +934,93 @@ button:disabled {
 
 .empty-state p {
   margin-bottom: 0;
+}
+
+.friend-group {
+  margin-top: 1.4rem;
+}
+
+.friend-group .section-heading-row {
+  margin-bottom: 0.75rem;
+}
+
+.friend-group .friends-list {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.friend-group .friends-list li {
+  width: 100%;
+  padding: 0.55rem 0.7rem 0.55rem 0.55rem;
+  border-radius: 8px;
+}
+
+.friend-name {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 0.05rem;
+}
+
+.friend-name small {
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  font-weight: 400;
+}
+
+.live-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+}
+
+.live-indicator span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--pulse);
+  box-shadow: 0 0 0 3px #f9e8e6;
+}
+
+.activity-feed {
+  margin-top: 1.2rem;
+}
+
+.activity-feed li {
+  display: flex;
+  gap: 0.85rem;
+  padding: 0.8rem 0 0.8rem 0.3rem;
+  font-weight: 400;
+}
+
+.activity-feed li:first-child {
+  font-weight: 400;
+}
+
+.activity-feed li::before {
+  content: none;
+}
+
+.activity-dot {
+  width: 9px;
+  height: 9px;
+  margin-top: 0.45rem;
+  border-radius: 50%;
+  background: var(--sage);
+  flex: 0 0 auto;
+}
+
+.activity-feed li:first-child .activity-dot {
+  background: var(--pulse);
+}
+
+.activity-feed li p {
+  margin: 0;
+}
+
+.activity-feed li time {
+  color: var(--ink-soft);
+  font-size: 0.75rem;
 }
