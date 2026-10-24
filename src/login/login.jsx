@@ -1,6 +1,48 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { hashDemoPassword, readStorage, STORAGE_KEYS, writeStorage } from '../lib/storage.js';
+
+function AuthForm({
+  title,
+  fields,
+  onSubmit,
+  submitLabel,
+  busy,
+}) {
+  return (
+    <div className="form-panel">
+      <h3>{title}</h3>
+
+      <form onSubmit={onSubmit}>
+        {fields.map((field) => (
+          <Fragment key={field.id}>
+            <label htmlFor={field.id}>
+              {field.label}
+            </label>
+
+            <input
+              id={field.id}
+              name={field.name}
+              type={field.type ?? 'text'}
+              autoComplete={field.autoComplete}
+              value={field.value}
+              onChange={(event) =>
+                field.onChange(event.target.value)
+              }
+              placeholder={field.placeholder}
+              minLength={field.minLength}
+              required
+            />
+          </Fragment>
+        ))}
+
+        <button type="submit" disabled={busy}>
+          {busy ? 'Please wait…' : submitLabel}
+        </button>
+      </form>
+    </div>
+  );
+}
 
 export function Login({ user, onAuthenticate }) {
   const navigate = useNavigate();
@@ -63,6 +105,82 @@ export function Login({ user, onAuthenticate }) {
     }
   }
 
+  const loginFields = [
+    {
+      id: 'login-username',
+      name: 'username',
+      label: 'Username',
+      autoComplete: 'username',
+      value: loginForm.username,
+      onChange: (value) =>
+        setLoginForm((current) => ({
+          ...current,
+          username: value,
+        })),
+      placeholder: 'your username',
+    },
+    {
+      id: 'login-password',
+      name: 'password',
+      label: 'Demo password',
+      type: 'password',
+      autoComplete: 'current-password',
+      value: loginForm.password,
+      onChange: (value) =>
+        setLoginForm((current) => ({
+          ...current,
+          password: value,
+        })),
+      placeholder: 'your demo password',
+    },
+  ];
+
+  const registrationFields = [
+    {
+      id: 'register-username',
+      name: 'username',
+      label: 'Username',
+      autoComplete: 'username',
+      minLength: 3,
+      value: registerForm.username,
+      onChange: (value) =>
+        setRegisterForm((current) => ({
+          ...current,
+          username: value,
+        })),
+      placeholder: 'choose a username',
+    },
+    {
+      id: 'register-email',
+      name: 'email',
+      label: 'Email',
+      type: 'email',
+      autoComplete: 'email',
+      value: registerForm.email,
+      onChange: (value) =>
+        setRegisterForm((current) => ({
+          ...current,
+          email: value,
+        })),
+      placeholder: 'you@example.com',
+    },
+    {
+      id: 'register-password',
+      name: 'password',
+      label: 'Demo password',
+      type: 'password',
+      autoComplete: 'new-password',
+      minLength: 6,
+      value: registerForm.password,
+      onChange: (value) =>
+        setRegisterForm((current) => ({
+          ...current,
+          password: value,
+        })),
+      placeholder: 'at least 6 characters',
+    },
+  ];
+
   if (user) {
     return (
       <main className="container body">
@@ -87,30 +205,23 @@ export function Login({ user, onAuthenticate }) {
       {message && <p className={`notice notice-${messageKind}`} role="status" aria-live="polite">{message}</p>}
       <div className="form-grid row g-4">
         <section className="col-md-6">
-          <div className="form-panel">
-            <h3>Login</h3>
-            <form onSubmit={handleLogin}>
-              <label htmlFor="login-username">Username</label>
-              <input id="login-username" name="username" autoComplete="username" value={loginForm.username} onChange={(event) => setLoginForm({ ...loginForm, username: event.target.value })} placeholder="your username" required />
-              <label htmlFor="login-password">Demo password</label>
-              <input id="login-password" name="password" type="password" autoComplete="current-password" value={loginForm.password} onChange={(event) => setLoginForm({ ...loginForm, password: event.target.value })} placeholder="your demo password" required />
-              <button type="submit" disabled={busy}>{busy ? 'Please wait…' : 'Login'}</button>
-            </form>
-          </div>
+          <AuthForm
+            title="Login"
+            fields={loginFields}
+            onSubmit={handleLogin}
+            submitLabel="Login"
+            busy={busy}
+          />
         </section>
+
         <section className="col-md-6">
-          <div className="form-panel">
-            <h3>Create an account</h3>
-            <form onSubmit={handleRegister}>
-              <label htmlFor="register-username">Username</label>
-              <input id="register-username" name="username" autoComplete="username" minLength={3} value={registerForm.username} onChange={(event) => setRegisterForm({ ...registerForm, username: event.target.value })} placeholder="choose a username" required />
-              <label htmlFor="register-email">Email</label>
-              <input id="register-email" name="email" type="email" autoComplete="email" value={registerForm.email} onChange={(event) => setRegisterForm({ ...registerForm, email: event.target.value })} placeholder="you@example.com" required />
-              <label htmlFor="register-password">Demo password</label>
-              <input id="register-password" name="password" type="password" autoComplete="new-password" minLength={6} value={registerForm.password} onChange={(event) => setRegisterForm({ ...registerForm, password: event.target.value })} placeholder="at least 6 characters" required />
-              <button type="submit" disabled={busy}>{busy ? 'Please wait…' : 'Create account'}</button>
-            </form>
-          </div>
+          <AuthForm
+            title="Create an account"
+            fields={registrationFields}
+            onSubmit={handleRegister}
+            submitLabel="Create account"
+            busy={busy}
+          />
         </section>
       </div>
       <p className="small-print">Do not use a real password. The browser hash and local account list are only for demonstrating UI state; a real app needs server-side identity, authorization, and secure storage.</p>
