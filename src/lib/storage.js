@@ -61,9 +61,20 @@ export const TYPE_LABELS = {
   nutrition: { label: 'Nutrition', unit: 'kcal', shortUnit: 'kcal', placeholder: 'e.g. 2100' },
 };
 
+export function formatEntryAmount(amount) {
+  const numericAmount = Number(amount);
+
+  if (!Number.isFinite(numericAmount)) {
+    return '0';
+  }
+
+  return Number.isInteger(numericAmount)
+    ? String(numericAmount)
+    : String(Number(numericAmount.toFixed(2)));
+}
+
 export function formatEntryValue(entry) {
   const config = TYPE_LABELS[entry.type] ?? TYPE_LABELS.sleep;
-  const amount = Number(entry.amount);
-  const formatted = Number.isInteger(amount) ? String(amount) : String(Number(amount.toFixed(2)));
-  return `${formatted} ${config.unit}`;
+
+  return `${formatEntryAmount(entry.amount)} ${config.unit}`;
 }
