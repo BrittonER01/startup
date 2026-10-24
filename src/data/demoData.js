@@ -1,6 +1,7 @@
 export const INITIAL_FRIENDS = [
   { id: 'friend-david', username: 'davidk', name: 'David Kim', status: 'friend' },
   { id: 'friend-nancy', username: 'nancylee', name: 'Nancy Lee', status: 'friend' },
+  { id: 'friend-sarah', username: 'sarahm', name: 'Sarah Miller', status: 'friend' },
 ];
 
 export const INITIAL_ACTIVITY = [

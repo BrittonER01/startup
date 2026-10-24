@@ -3,11 +3,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.css';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { SiteHeader } from './components/SiteHeader.jsx';
-import { Home } from './home/home';
-import { Login } from './login/login';
-import { Dashboard } from './dashboard/dashboard';
-import { Articles } from './articles/articles';
-import { Friends } from './friends/friends';
+import { Home } from './home/home.jsx';
+import { Login } from './login/login.jsx';
+import { Dashboard } from './dashboard/dashboard.jsx';
+import { Articles } from './articles/articles.jsx';
+import { Friends } from './friends/friends.jsx';
 import { readStorage, STORAGE_KEYS, writeStorage } from './lib/storage.js';
 
 export default function App() {
@@ -21,6 +21,7 @@ export default function App() {
       }
     }
   }, [user]);
+
   function handleLogout() {
     setUser(null);
   }

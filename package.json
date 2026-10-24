@@ -1,15 +1,16 @@
 {
   "name": "startup",
   "version": "1.0.0",
-  "description": "[My Notes](notes.md)",
+  "private": true,
+  "description": "VitalLog CS 260 startup project with interactive React functionality",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["cs260", "startup", "react", "health-tracking"],
+  "author": "Brit Richardson",
   "license": "ISC",
   "devDependencies": {
     "vite": "^8.3.3"

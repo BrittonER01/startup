@@ -1,3 +1,4 @@
+// Browser storage is a temporary substitute for a future backend/data service.
 export const STORAGE_KEYS = {
   user: 'vitallog.user.v1',
   accounts: 'vitallog.accounts.v1',
@@ -32,8 +33,36 @@ export function todayISO() {
   return localDate.toISOString().slice(0, 10);
 }
 
+// This client-side hash is only a classroom mock. Real authentication belongs on a server.
+export async function hashDemoPassword(password) {
+  if (!globalThis.crypto?.subtle) {
+    throw new Error('Secure browser cryptography is unavailable. Open this app on localhost or HTTPS.');
+  }
+  const bytes = new TextEncoder().encode(password);
+  const digest = await globalThis.crypto.subtle.digest('SHA-256', bytes);
+  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join('');
+}
+
+export function loadEntries() {
+  const saved = readStorage(STORAGE_KEYS.entries, null);
+  if (Array.isArray(saved)) return saved;
+  const today = todayISO();
+  return [
+    { id: 'seed-sleep', date: today, type: 'sleep', amount: 7.5, notes: 'Woke up once' },
+    { id: 'seed-exercise', date: today, type: 'exercise', amount: 30, notes: 'Felt strong on a run' },
+    { id: 'seed-nutrition', date: today, type: 'nutrition', amount: 2100, notes: 'Balanced day' },
+  ];
+}
+
 export const TYPE_LABELS = {
   sleep: { label: 'Sleep', unit: 'hours', shortUnit: 'h', placeholder: 'e.g. 7.5' },
   exercise: { label: 'Exercise', unit: 'minutes', shortUnit: 'min', placeholder: 'e.g. 30' },
   nutrition: { label: 'Nutrition', unit: 'kcal', shortUnit: 'kcal', placeholder: 'e.g. 2100' },
 };
+
+export function formatEntryValue(entry) {
+  const config = TYPE_LABELS[entry.type] ?? TYPE_LABELS.sleep;
+  const amount = Number(entry.amount);
+  const formatted = Number.isInteger(amount) ? String(amount) : String(Number(amount.toFixed(2)));
+  return `${formatted} ${config.unit}`;
+}
