@@ -25,6 +25,11 @@ Command for deploying files to server:
 ./deployFiles.sh -k ~/CS260/DoNotCommit/MasterKey.pem -h vitallog.click -s startup
 ```
 
+Command for deploying React:
+```
+./deployReact.sh -k ~/CS260/DoNotCommit/MasterKey.pem -h vitallog.click -s startup
+```
+
 ## HTML
 
 Interesting things I have learned about HTML
