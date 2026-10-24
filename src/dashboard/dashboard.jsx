@@ -14,6 +14,18 @@ export function Dashboard({ user }) {
     writeStorage(STORAGE_KEYS.entries, entries);
   }, [entries]);
 
+  useEffect(() => {
+  if (!feedback) return;
+
+  const timeoutId = window.setTimeout(() => {
+    setFeedback('');
+  }, 4000);
+
+  return () => {
+    window.clearTimeout(timeoutId);
+  };
+}, [feedback]);
+
   const today = todayISO();
   const todayEntries = entries.filter((entry) => entry.date === today);
   const totals = useMemo(() => Object.fromEntries(CATEGORY_ORDER.map((type) => [
