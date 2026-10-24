@@ -29,6 +29,16 @@ export function writeStorage(key, value) {
   }
 }
 
+export function removeStorage(key) {
+  try {
+    window.localStorage.removeItem(key);
+    return true;
+  } catch (error) {
+    console.warn(`Could not remove ${key} from localStorage.`, error);
+    return false;
+  }
+}
+
 export function todayISO() {
   const now = new Date();
   const localDate = new Date(now.getTime() - now.getTimezoneOffset() * 60_000);

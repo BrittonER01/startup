@@ -8,17 +8,21 @@ import { Login } from './login/login.jsx';
 import { Dashboard } from './dashboard/dashboard.jsx';
 import { Articles } from './articles/articles.jsx';
 import { Friends } from './friends/friends.jsx';
-import { readStorage, STORAGE_KEYS, writeStorage } from './lib/storage.js';
+import {
+  readStorage,
+  removeStorage,
+  STORAGE_KEYS,
+  writeStorage,
+} from './lib/storage.js';
 
 export default function App() {
   const [user, setUser] = useState(() => readStorage(STORAGE_KEYS.user, null));
 
   useEffect(() => {
-    if (user) writeStorage(STORAGE_KEYS.user, user);
-    else {
-      try { window.localStorage.removeItem(STORAGE_KEYS.user); } catch (error) {
-        console.warn('Could not clear the demo session.', error);
-      }
+    if (user) {
+      writeStorage(STORAGE_KEYS.user, user);
+    } else {
+      removeStorage(STORAGE_KEYS.user);
     }
   }, [user]);
 
