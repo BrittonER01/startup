@@ -1,3 +1,30 @@
+// Sample health entries used when the browser has no saved entry data.
+export function createInitialEntries(today) {
+  return [
+    {
+      id: 'seed-sleep',
+      date: today,
+      type: 'sleep',
+      amount: 7.5,
+      notes: 'Woke up once',
+    },
+    {
+      id: 'seed-exercise',
+      date: today,
+      type: 'exercise',
+      amount: 30,
+      notes: 'Felt strong on a run',
+    },
+    {
+      id: 'seed-nutrition',
+      date: today,
+      type: 'nutrition',
+      amount: 2100,
+      notes: 'Balanced day',
+    },
+  ];
+}
+
 export const INITIAL_FRIENDS = [
   { id: 'friend-david', username: 'davidk', name: 'David Kim', status: 'friend' },
   { id: 'friend-nancy', username: 'nancylee', name: 'Nancy Lee', status: 'friend' },

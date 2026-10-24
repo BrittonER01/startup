@@ -1,3 +1,5 @@
+import { createInitialEntries } from '../data/demoData.js';
+
 // Browser storage is a temporary substitute for a future backend/data service.
 export const STORAGE_KEYS = {
   user: 'vitallog.user.v1',
@@ -45,13 +47,12 @@ export async function hashDemoPassword(password) {
 
 export function loadEntries() {
   const saved = readStorage(STORAGE_KEYS.entries, null);
+
+  // Use saved browser data when it is already available.
   if (Array.isArray(saved)) return saved;
-  const today = todayISO();
-  return [
-    { id: 'seed-sleep', date: today, type: 'sleep', amount: 7.5, notes: 'Woke up once' },
-    { id: 'seed-exercise', date: today, type: 'exercise', amount: 30, notes: 'Felt strong on a run' },
-    { id: 'seed-nutrition', date: today, type: 'nutrition', amount: 2100, notes: 'Balanced day' },
-  ];
+
+  // Otherwise, create sample entries for today.
+  return createInitialEntries(todayISO());
 }
 
 export const TYPE_LABELS = {
