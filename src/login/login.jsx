@@ -57,6 +57,29 @@ export function Login({ user, onAuthenticate }) {
     setMessageKind(kind);
   }
 
+  function clearMessage() {
+    setMessage('');
+    setMessageKind('success');
+  }
+
+  function updateLoginField(field, value) {
+    setLoginForm((current) => ({
+      ...current,
+      [field]: value,
+    }));
+
+    clearMessage();
+  }
+
+  function updateRegisterField(field, value) {
+    setRegisterForm((current) => ({
+      ...current,
+      [field]: value,
+    }));
+
+    clearMessage();
+  }
+
   async function handleRegister(event) {
     event.preventDefault();
     setBusy(true);
@@ -113,10 +136,7 @@ export function Login({ user, onAuthenticate }) {
       autoComplete: 'username',
       value: loginForm.username,
       onChange: (value) =>
-        setLoginForm((current) => ({
-          ...current,
-          username: value,
-        })),
+        updateLoginField('username', value),
       placeholder: 'your username',
     },
     {
@@ -127,10 +147,7 @@ export function Login({ user, onAuthenticate }) {
       autoComplete: 'current-password',
       value: loginForm.password,
       onChange: (value) =>
-        setLoginForm((current) => ({
-          ...current,
-          password: value,
-        })),
+        updateLoginField('password', value),
       placeholder: 'your demo password',
     },
   ];
@@ -144,10 +161,7 @@ export function Login({ user, onAuthenticate }) {
       minLength: 3,
       value: registerForm.username,
       onChange: (value) =>
-        setRegisterForm((current) => ({
-          ...current,
-          username: value,
-        })),
+        updateRegisterField('username', value),
       placeholder: 'choose a username',
     },
     {
@@ -158,10 +172,7 @@ export function Login({ user, onAuthenticate }) {
       autoComplete: 'email',
       value: registerForm.email,
       onChange: (value) =>
-        setRegisterForm((current) => ({
-          ...current,
-          email: value,
-        })),
+        updateRegisterField('email', value),
       placeholder: 'you@example.com',
     },
     {
@@ -173,10 +184,7 @@ export function Login({ user, onAuthenticate }) {
       minLength: 6,
       value: registerForm.password,
       onChange: (value) =>
-        setRegisterForm((current) => ({
-          ...current,
-          password: value,
-        })),
+        updateRegisterField('password', value),
       placeholder: 'at least 6 characters',
     },
   ];
