@@ -526,13 +526,6 @@ tbody tr:nth-child(even) {
 }
 
 /* ---------- Responsive ---------- */
-@media (max-width: 720px) {
-  .site-header-inner {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
-
 #root {
   min-height: 100vh;
 }
@@ -1083,7 +1076,7 @@ button:disabled {
   font-size: 0.82rem;
 }
 
-.research-card > a {
+.research-card>a {
   margin-top: auto;
   padding-top: 0.45rem;
   font-size: 0.86rem;
@@ -1119,4 +1112,42 @@ footer p {
 
 .footer-note {
   margin-top: 0.65rem;
+}
+
+@media (max-width: 820px) {
+  .feature-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .metric-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .site-header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-menu {
+    gap: 0.7rem 1rem;
+  }
+
+  .hero h2,
+  .page-intro h2 {
+    font-size: 2rem;
+  }
+
+  .research-tools {
+    align-items: stretch;
+  }
+
+  .research-tools .button-quiet {
+    width: 100%;
+  }
+
+  .section-heading-row {
+    align-items: flex-start;
+  }
 }
