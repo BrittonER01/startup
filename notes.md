@@ -172,7 +172,13 @@ section:nth-child(2) { flex: 3; }
 
 ## React
 
-Interesting things I have learned about React
+- React rerenders components when state setters such as `setEntries` or `setUser` update state; directly changing a normal variable does not trigger a rerender.
+- Form controls are controlled by giving them a `value` and an `onChange` callback. Forms should call `event.preventDefault()` before client-side handling to avoid a browser page reload.
+- `useEffect` is appropriate for synchronizing with browser storage and timers. Effects that start a timer must return a cleanup function so stale intervals do not keep running after navigation.
+- `localStorage` stores strings, so object/array data must be JSON-serialized and parsed. It is per browser/origin, can be cleared by the user, and is not a database or secure secret store.
+- `useMemo` is used on the Dashboard to derive category totals from current state. Derived totals should not be separately stored when they can be calculated from entries.
+- Vite expects the HTML entry point at the project root and the React JavaScript entry at `src/main.jsx`. Component imports should include exact file paths and extensions where used.
+- Browser dev tools are useful for catching import errors, inspecting localStorage, checking interval activity, and debugging component event handlers.
 
 ## General Notes
 I love web programming!

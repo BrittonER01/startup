@@ -144,9 +144,9 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [x] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
-- [ ] **All functionality implemented or mocked out** - I did not complete this part of the deliverable.
-- [ ] **Hooks** - I did not complete this part of the deliverable.
+- [X] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
+- [X] **All functionality implemented or mocked out** - Implemented interactive functionality throughout VitalLog, including user registration, login, and health and fitness tracking. Used localStorage to simulate account management and data persistence without requiring a backend or database.
+- [X] **Hooks** - Used React hooks such as useState and useEffect to manage component state, update the interface in response to user interactions, and synchronize application data with localStorage.
 
 ## 🚀 Service deliverable
 
