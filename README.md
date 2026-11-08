@@ -150,16 +150,16 @@ For this deliverable I did the following. I checked the box `[x]` and added a de
 
 ## 🚀 Service deliverable
 
-For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
+For this deliverable I implemented backend service support for VitalLog using Node.js and Express.
 
-- [x] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
-- [ ] **Node.js/Express HTTP service** - I did not complete this part of the deliverable.
-- [ ] **Static middleware for frontend** - I did not complete this part of the deliverable.
-- [ ] **Calls to third party endpoints** - I did not complete this part of the deliverable.
-- [ ] **Backend service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Frontend calls service endpoints** - I did not complete this part of the deliverable.
-- [ ] **Supports registration, login, logout, and restricted endpoint** - I did not complete this part of the deliverable.
-- [ ] **Uses BCrypt to hash passwords** - I did not complete this part of the deliverable.
+- [x] **Prerequisites** - Simon Service was deployed, the GitHub repository is linked on the application homepage, and I maintained a history of development commits.
+- [x] **Node.js/Express HTTP service** - Created a separate backend application in the `service` directory using Node.js and Express. The backend runs on port 4000.
+- [x] **Static middleware for frontend** - Configured Express static middleware to serve the production React application from the `public` directory after deployment.
+- [x] **Calls to third-party endpoints** - Integrated the NCBI PubMed E-utilities API into the Research Feed. The frontend uses ESearch to retrieve matching article IDs and ESummary to retrieve publication metadata.
+- [x] **Backend service endpoints** - Created application endpoints for managing health entries and friend connections, including retrieving, creating, accepting, and deleting records.
+- [x] **Frontend calls service endpoints** - Connected the React login, registration, logout, dashboard, and friends functionality to the Express backend using `fetch`.
+- [x] **Registration, login, logout, and restricted endpoint** - Implemented user registration, authentication, logout, and protected endpoints using authentication middleware and HTTP-only cookies.
+- [x] **BCrypt password hashing** - Implemented BCrypt password hashing when registering users and password comparison during login.
 
 ## 🚀 DB deliverable
 

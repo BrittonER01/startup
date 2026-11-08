@@ -205,12 +205,6 @@ and fitness startup application.
 - Added frontend fetch requests for protected endpoints.
 - Retained third-party nutritional information API integration.
 
-### Deployment
-- Replaced the previous deployment script with the
-  Simon Service deployment script.
-- Configured Express to serve the production frontend.
-- Deployed the application using the startup service name.
-
 ### NCBI E-utilities
 - PubMed provides access to scientific literature through the NCBI E-utilities API.
 - ESearch searches PubMed for articles matching a specified query.
@@ -253,6 +247,65 @@ and fitness startup application.
 - Friend records are associated with the authenticated username.
 - The friends interface now retrieves and updates data through
   the backend instead of localStorage.
+
+### Backend endpoints
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| POST | `/api/auth/create` | Register a user |
+| POST | `/api/auth/login` | Authenticate a user |
+| DELETE | `/api/auth/logout` | Log out |
+| GET | `/api/profile` | Retrieve authenticated profile |
+| GET | `/api/entries` | Retrieve health entries |
+| POST | `/api/entries` | Save a health entry |
+| DELETE | `/api/entries/:id` | Delete a health entry |
+| GET | `/api/friends` | Retrieve friends |
+| POST | `/api/friends` | Add a friend |
+| PATCH | `/api/friends/:id` | Accept a friend request |
+| DELETE | `/api/friends/:id` | Remove a friend |
+
+### Implementation notes
+
+- Frontend and backend have separate NPM configurations.
+- Vite proxies local API requests to the Express server on port 4000.
+- Authentication tokens are stored in HTTP-only cookies.
+- Passwords are hashed using BCrypt with a salt cost of 10.
+- User, friend, and health-entry data currently use temporary in-memory storage and will be moved to persistent database storage in the database deliverable.
+- The Friends activity feed remains simulated; real-time WebSocket functionality is reserved for the WebSocket deliverable.
+
+### Deployment
+
+- Replaced the previous deployment script with `deployService.sh` from the Simon Service repository.
+- Configured Express to serve the compiled React frontend.
+- Built the production frontend successfully using Vite.
+- Deployed using the required startup service parameter.
+
+## Health Dashboard Backend Integration
+
+- Created GET, POST, and DELETE endpoints for health entries.
+- Health entries are associated with the authenticated username.
+- The backend generates UUIDs for new health entries.
+- React retrieves health records using fetch.
+- The dashboard updates its state after successful backend requests.
+- Protected endpoints reject requests without valid authentication.
+
+## Friends Backend Integration
+
+- Created authenticated endpoints for retrieving and managing friends.
+- POST creates a friend request.
+- PATCH updates a friend request to an accepted status.
+- DELETE removes a friend.
+- Friend records are associated with the authenticated account.
+- The Friends page retrieves its data from Express rather than localStorage.
+
+## Production Deployment
+
+- Vite generates the production frontend using `npm run build`.
+- The deployment script copies the frontend build into `build/public`.
+- Backend JavaScript and package configuration are copied into the deployment package.
+- Express serves the production frontend through `express.static('public')`.
+- The deployment script installs backend dependencies on the AWS server.
+- The PM2 process is restarted using the startup service name.
 
 ## General Notes
 I love web programming!
