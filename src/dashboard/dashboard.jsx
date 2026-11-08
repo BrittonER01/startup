@@ -1,30 +1,68 @@
 import { useEffect, useMemo, useState } from 'react';
-import { formatEntryAmount, formatEntryValue, loadEntries, readStorage, STORAGE_KEYS, todayISO, TYPE_LABELS, writeStorage } from '../lib/storage.js';
+import {
+  formatEntryAmount,
+  formatEntryValue,
+  todayISO,
+  TYPE_LABELS,
+} from '../lib/storage.js';
 
 const CATEGORY_ORDER = ['sleep', 'exercise', 'nutrition'];
 const BAR_LIMITS = { sleep: 12, exercise: 120, nutrition: 3000 };
 
 export function Dashboard({ user }) {
-  const [entries, setEntries] = useState(() => loadEntries());
+  const [entries, setEntries] = useState([]);
+  const [loadingEntries, setLoadingEntries] = useState(true);
+  const [savingEntry, setSavingEntry] = useState(false);
   const [form, setForm] = useState({ type: 'sleep', amount: '', notes: '' });
   const [feedback, setFeedback] = useState('');
   const [filter, setFilter] = useState('all');
 
+  // Retrieve health entries from the backend.
   useEffect(() => {
-    writeStorage(STORAGE_KEYS.entries, entries);
-  }, [entries]);
+    const controller = new AbortController();
+
+    async function fetchEntries() {
+      try {
+        const response = await fetch('/api/entries', {
+          credentials: 'include',
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error('Unable to retrieve health entries.');
+        }
+
+        const data = await response.json();
+
+        setEntries(data);
+      } catch (error) {
+        if (error.name !== 'AbortError') {
+          console.error(error);
+          setFeedback(error.message);
+        }
+      } finally {
+        if (!controller.signal.aborted) {
+          setLoadingEntries(false);
+        }
+      }
+    }
+
+    fetchEntries();
+
+    return () => controller.abort();
+  }, []);
 
   useEffect(() => {
-  if (!feedback) return;
+    if (!feedback) return;
 
-  const timeoutId = window.setTimeout(() => {
-    setFeedback('');
-  }, 4000);
+    const timeoutId = window.setTimeout(() => {
+      setFeedback('');
+    }, 4000);
 
-  return () => {
-    window.clearTimeout(timeoutId);
-  };
-}, [feedback]);
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [feedback]);
 
   const today = todayISO();
   const todayEntries = entries.filter((entry) => entry.date === today);
@@ -37,29 +75,84 @@ export function Dashboard({ user }) {
     .slice()
     .sort((a, b) => b.date.localeCompare(a.date));
 
-  function handleSubmit(event) {
+
+  async function handleSubmit(event) {
     event.preventDefault();
+
     const amount = Number(form.amount);
+
     if (!Number.isFinite(amount) || amount <= 0) {
       setFeedback('Enter a number greater than zero.');
       return;
     }
-    const nextEntry = {
-      id: globalThis.crypto?.randomUUID?.() ?? `entry-${Date.now()}`,
-      date: today,
-      type: form.type,
-      amount,
-      notes: form.notes.trim(),
-    };
-    setEntries((current) => [nextEntry, ...current]);
-    setForm({ ...form, amount: '', notes: '' });
-    setFeedback(`${TYPE_LABELS[form.type].label} entry saved.`);
+
+    setSavingEntry(true);
+
+    try {
+      const response = await fetch('/api/entries', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          date: today,
+          type: form.type,
+          amount,
+          notes: form.notes.trim(),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.msg || 'Unable to save entry.');
+      }
+
+      setEntries((current) => [data, ...current]);
+
+      setForm({
+        ...form,
+        amount: '',
+        notes: '',
+      });
+
+      setFeedback(
+        `${TYPE_LABELS[form.type].label} entry saved.`
+      );
+    } catch (error) {
+      console.error(error);
+      setFeedback(error.message || 'Unable to save entry.');
+    } finally {
+      setSavingEntry(false);
+    }
   }
 
-  function removeEntry(id) {
-    setEntries((current) => current.filter((entry) => entry.id !== id));
-    setFeedback('Entry removed from this browser.');
+
+
+  async function removeEntry(id) {
+    try {
+      const response = await fetch(`/api/entries/${id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.msg || 'Unable to delete entry.');
+      }
+
+      setEntries((current) =>
+        current.filter((entry) => entry.id !== id)
+      );
+
+      setFeedback('Entry removed successfully.');
+    } catch (error) {
+      console.error(error);
+      setFeedback(error.message || 'Unable to delete entry.');
+    }
   }
+
 
   return (
     <main className="container body">

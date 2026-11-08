@@ -14,6 +14,7 @@ const port = process.argv.length > 2 ? process.argv[2] : 4000;
 // Temporary in-memory application storage.
 let users = [];
 let favorites = [];
+let entries = [];
 
 // Middleware
 app.use(express.json());
@@ -134,6 +135,68 @@ const verifyAuth = async (req, res, next) => {
     });
   }
 };
+
+// Retrieve health entries belonging to the authenticated user.
+apiRouter.get('/entries', verifyAuth, (req, res) => {
+  const userEntries = entries
+    .filter((entry) => entry.username === req.user.username)
+    .sort((a, b) => b.date.localeCompare(a.date));
+
+  res.send(userEntries);
+});
+
+// Save a new health entry.
+apiRouter.post('/entries', verifyAuth, (req, res) => {
+  const { type, amount, date, notes } = req.body;
+
+  const validTypes = ['sleep', 'exercise', 'nutrition'];
+
+  if (
+    !validTypes.includes(type) ||
+    !Number.isFinite(amount) ||
+    amount <= 0 ||
+    typeof date !== 'string' ||
+    !/^\d{4}-\d{2}-\d{2}$/.test(date) ||
+    (notes !== undefined && typeof notes !== 'string')
+  ) {
+    return res.status(400).send({
+      msg: 'Invalid health entry',
+    });
+  }
+
+  const entry = {
+    id: uuid.v4(),
+    username: req.user.username,
+    date,
+    type,
+    amount,
+    notes: (notes || '').trim().slice(0, 240),
+  };
+
+  entries.push(entry);
+
+  res.status(201).send(entry);
+});
+
+// Delete a health entry.
+apiRouter.delete('/entries/:id', verifyAuth, (req, res) => {
+  const index = entries.findIndex(
+    (entry) =>
+      entry.id === req.params.id &&
+      entry.username === req.user.username
+  );
+
+  if (index === -1) {
+    return res.status(404).send({
+      msg: 'Entry not found',
+    });
+  }
+
+  entries.splice(index, 1);
+
+  res.status(204).end();
+});
+
 
 // Protected profile endpoint
 apiRouter.get('/profile', verifyAuth, (req, res) => {
