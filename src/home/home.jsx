@@ -1,18 +1,75 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { loadEntries, readStorage, STORAGE_KEYS } from '../lib/storage.js';
-import { INITIAL_FRIENDS } from '../data/demoData.js';
+import { API } from '../lib/api.js';
 
 export function Home({ user }) {
-  const [entries, setEntries] = useState(() => loadEntries());
-  const [friends, setFriends] = useState(() => readStorage(STORAGE_KEYS.friends, INITIAL_FRIENDS));
+  const [stats, setStats] = useState({
+    entries: 0,
+    friends: 0,
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    setEntries(loadEntries());
-    setFriends(readStorage(STORAGE_KEYS.friends, INITIAL_FRIENDS));
-  }, []);
+    const controller = new AbortController();
 
-  const acceptedFriends = friends.filter((friend) => friend.status === 'friend').length;
+    if (!user) {
+      setStats({ entries: 0, friends: 0 });
+      setError('');
+      setLoading(false);
+      return () => controller.abort();
+    }
+
+    async function loadStats() {
+      setLoading(true);
+      setError('');
+
+      try {
+        const [entriesResponse, friendsResponse] =
+          await Promise.all([
+            fetch(API.entries.list, {
+              credentials: 'include',
+              signal: controller.signal,
+            }),
+            fetch(API.friends.list, {
+              credentials: 'include',
+              signal: controller.signal,
+            }),
+          ]);
+
+        if (!entriesResponse.ok || !friendsResponse.ok) {
+          throw new Error('Unable to load your statistics.');
+        }
+
+        const [entries, friends] = await Promise.all([
+          entriesResponse.json(),
+          friendsResponse.json(),
+        ]);
+
+        if (controller.signal.aborted) return;
+
+        setStats({
+          entries: entries.length,
+          friends: friends.filter(
+            (friend) => friend.status === 'friend'
+          ).length,
+        });
+      } catch (error) {
+        if (error.name !== 'AbortError') {
+          setError(error.message);
+        }
+      } finally {
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
+      }
+    }
+
+    loadStats();
+
+    return () => controller.abort();
+  }, [user?.username]);
   return (
     <main className="container body">
       <section className="hero row g-4 align-items-start">
@@ -24,12 +81,36 @@ export function Home({ user }) {
             <Link className="button-link" to="/dashboard">Log today's habits</Link>
             <Link className="text-link" to="/articles">Explore research <span aria-hidden="true">→</span></Link>
           </div>
-          <p className="welcome-note">{user ? `Welcome back, ${user.username}. Your demo session is active on this browser.` : 'Explore the demo, or register an account to personalize your session.'}</p>
-        </div>
+          <p className="welcome-note">
+            {user
+              ? `Welcome back, ${user.username}. Your health data is connected to your account.`
+              : 'Sign in or create an account to start tracking your health.'}
+          </p>        </div>
         <aside className="vitals-panel col-lg-5" aria-label="VitalLog at a glance">
           <h3>Your VitalLog at a glance</h3>
-          <div className="stat"><span className="stat-value">{entries.length}</span><span className="stat-label">health entries saved</span></div>
-          <div className="stat"><span className="stat-value">{acceptedFriends}</span><span className="stat-label">friends connected</span></div>
+          <div className="stat">
+            <span className="stat-value">
+              {loading ? '...' : user && !error ? stats.entries : '—'}
+            </span>
+            <span className="stat-label">
+              health entries saved
+            </span>
+          </div>
+
+          <div className="stat">
+            <span className="stat-value">
+              {loading ? '...' : user && !error ? stats.friends : '—'}
+            </span>
+            <span className="stat-label">
+              friends connected
+            </span>
+          </div>
+
+          {error && (
+            <p className="form-feedback" role="alert">
+              {error}
+            </p>
+          )}
           <div className="stat"><span className="stat-value">3</span><span className="stat-label">research topics to explore</span></div>
         </aside>
       </section>

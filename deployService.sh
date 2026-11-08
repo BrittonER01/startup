@@ -156,7 +156,7 @@ if [ -s "\$NVM_DIR/nvm.sh" ]; then
 fi
 
 # Use the installed Node.js version.
-nvm use v22.12.0
+nvm use default
 
 echo "Node version:"
 node --version
@@ -200,7 +200,7 @@ if [ -s "\$NVM_DIR/nvm.sh" ]; then
     . "\$NVM_DIR/nvm.sh"
 fi
 
-nvm use v22.12.0
+nvm use default
 
 # Preserve previous deployment for rollback.
 rm -rf "services/$service.previous"
@@ -240,7 +240,7 @@ if [ -s "\$NVM_DIR/nvm.sh" ]; then
     . "\$NVM_DIR/nvm.sh"
 fi
 
-nvm use v22.12.0
+nvm use default
 
 success=0
 

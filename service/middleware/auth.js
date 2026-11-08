@@ -29,7 +29,6 @@ async function createUser(username, email, password) {
     username,
     email,
     password: passwordHash,
-    token: uuid.v4(),
   };
 
   users.push(user);
@@ -40,6 +39,28 @@ async function createUser(username, email, password) {
 // Set authentication cookie.
 function setAuthCookie(res, token) {
   res.cookie(authCookieName, token, cookieOptions);
+}
+
+function startSession(res, user) {
+  user.token = uuid.v4();
+  setAuthCookie(res, user.token);
+}
+
+async function endSession(req, res) {
+  const user = await findUser(
+    'token',
+    req.cookies?.[authCookieName]
+  );
+
+  if (user) {
+    delete user.token;
+  }
+
+  res.clearCookie(authCookieName, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+  });
 }
 
 // Protect endpoints.
@@ -69,5 +90,7 @@ module.exports = {
   findUser,
   createUser,
   setAuthCookie,
+  startSession,
+  endSession,
   verifyAuth,
 };

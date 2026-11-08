@@ -1,12 +1,10 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
-const uuid = require('uuid');
-
 const {
-  authCookieName,
   findUser,
   createUser,
-  setAuthCookie,
+  startSession,
+  endSession,
 } = require('../middleware/auth');
 
 const router = express.Router();
@@ -43,7 +41,7 @@ router.post('/create', async (req, res) => {
 
   const user = await createUser(username, email, password);
 
-  setAuthCookie(res, user.token);
+  startSession(res, user);
 
   res.status(201).send({
     username: user.username,
@@ -58,10 +56,12 @@ router.post('/login', async (req, res) => {
 
   const user = await findUser('username', username);
 
-  if (user && await bcrypt.compare(password, user.password)) {
-    user.token = uuid.v4();
-
-    setAuthCookie(res, user.token);
+  if (
+    user &&
+    typeof password === 'string' &&
+    await bcrypt.compare(password, user.password)
+  ) {
+    startSession(res, user);
 
     return res.send({
       username: user.username,
@@ -77,20 +77,7 @@ router.post('/login', async (req, res) => {
 
 // Logout
 router.delete('/logout', async (req, res) => {
-  const user = await findUser(
-    'token',
-    req.cookies[authCookieName]
-  );
-
-  if (user) {
-    delete user.token;
-  }
-
-  res.clearCookie(authCookieName, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-  });
+  await endSession(req, res);
 
   res.status(204).end();
 });
