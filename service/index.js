@@ -88,6 +88,7 @@ apiRouter.post('/auth/login', async (req, res) => {
 
     return res.send({
       username: user.username,
+      email: user.email,
     });
   }
 
@@ -95,6 +96,7 @@ apiRouter.post('/auth/login', async (req, res) => {
     msg: 'Unauthorized',
   });
 });
+
 
 // Logout
 apiRouter.delete('/auth/logout', async (req, res) => {
