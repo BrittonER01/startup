@@ -159,7 +159,7 @@ export function Dashboard({ user }) {
       <section className="page-intro dashboard-intro">
         <p className="eyebrow">YOUR PERSONAL LOG</p>
         <h2>{user ? `${user.username}'s dashboard` : 'Your health dashboard'}</h2>
-        <p>Record a habit and watch today's snapshot and history update instantly. Data is saved in this browser.</p>
+        <p>Record a habit and watch today's snapshot and history update instantly. Your health entries are securely associated with your account..</p>
       </section>
       <div className="dashboard-grid row g-4 align-items-start">
         <section className="col-lg-5">
@@ -173,7 +173,9 @@ export function Dashboard({ user }) {
             <input id="entry-value" type="number" min="0.1" step="any" value={form.amount} onChange={(event) => setForm({ ...form, amount: event.target.value })} placeholder={TYPE_LABELS[form.type].placeholder} required />
             <label htmlFor="entry-notes">Notes (optional)</label>
             <textarea id="entry-notes" value={form.notes} onChange={(event) => setForm({ ...form, notes: event.target.value })} placeholder="How did it go?" maxLength={240} />
-            <button type="submit">Save entry</button>
+            <button type="submit" disabled={savingEntry}>
+              {savingEntry ? 'Saving...' : 'Save entry'}
+            </button>
           </form>
           {feedback && <p className="form-feedback" role="status">{feedback}</p>}
         </section>
@@ -201,18 +203,90 @@ export function Dashboard({ user }) {
         </section>
       </div>
 
+
       <section className="history-section">
-        <div className="section-heading-row history-heading"><div><p className="eyebrow">YOUR ACTIVITY</p><h2>Entry history</h2></div><label className="filter-control" htmlFor="entry-filter">Show <select id="entry-filter" value={filter} onChange={(event) => setFilter(event.target.value)}><option value="all">All entries</option>{CATEGORY_ORDER.map((type) => <option key={type} value={type}>{TYPE_LABELS[type].label}</option>)}</select></label></div>
-        {visibleEntries.length ? (
+        <div className="section-heading-row history-heading">
+          <div>
+            <p className="eyebrow">YOUR ACTIVITY</p>
+            <h2>Entry history</h2>
+          </div>
+
+          <label className="filter-control" htmlFor="entry-filter">
+            Show
+            <select
+              id="entry-filter"
+              value={filter}
+              onChange={(event) => setFilter(event.target.value)}
+            >
+              <option value="all">All entries</option>
+              {CATEGORY_ORDER.map((type) => (
+                <option key={type} value={type}>
+                  {TYPE_LABELS[type].label}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+
+        {loadingEntries ? (
+          <p>Loading your health entries...</p>
+        ) : visibleEntries.length ? (
           <div className="table-wrap">
             <table id="entry-history">
               <caption>Saved health entries</caption>
-              <thead><tr><th scope="col">Date</th><th scope="col">Type</th><th scope="col">Value</th><th scope="col">Notes</th><th scope="col"><span className="visually-hidden">Actions</span></th></tr></thead>
-              <tbody>{visibleEntries.map((entry) => <tr key={entry.id}><td>{entry.date}</td><td>{TYPE_LABELS[entry.type]?.label ?? entry.type}</td><td>{formatEntryValue(entry)}</td><td>{entry.notes || '—'}</td><td><button className="button-text" type="button" onClick={() => removeEntry(entry.id)} aria-label={`Delete ${TYPE_LABELS[entry.type]?.label ?? 'health'} entry from ${entry.date}`}>Delete</button></td></tr>)}</tbody>
+
+              <thead>
+                <tr>
+                  <th scope="col">Date</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Value</th>
+                  <th scope="col">Notes</th>
+                  <th scope="col">
+                    <span className="visually-hidden">Actions</span>
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {visibleEntries.map((entry) => (
+                  <tr key={entry.id}>
+                    <td>{entry.date}</td>
+
+                    <td>
+                      {TYPE_LABELS[entry.type]?.label ?? entry.type}
+                    </td>
+
+                    <td>{formatEntryValue(entry)}</td>
+
+                    <td>{entry.notes || '—'}</td>
+
+                    <td>
+                      <button
+                        className="button-text"
+                        type="button"
+                        onClick={() => removeEntry(entry.id)}
+                        aria-label={`Delete ${TYPE_LABELS[entry.type]?.label ?? 'health'
+                          } entry from ${entry.date}`}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
           </div>
-        ) : <div className="empty-state"><h3>No entries match this filter</h3><p>Choose another category or log your first entry above.</p></div>}
+        ) : (
+          <div className="empty-state">
+            <h3>No entries match this filter</h3>
+            <p>
+              Choose another category or log your first entry above.
+            </p>
+          </div>
+        )}
       </section>
+
     </main>
   );
 }
+

@@ -185,5 +185,37 @@ section:nth-child(2) { flex: 3; }
 - Vite expects the HTML entry point at the project root and the React JavaScript entry at `src/main.jsx`. Component imports should include exact file paths and extensions where used.
 - Browser dev tools are useful for catching import errors, inspecting localStorage, checking interval activity, and debugging component event handlers.
 
+### NCBI E-utilities
+- PubMed provides access to scientific literature through the NCBI E-utilities API.
+- ESearch searches PubMed for articles matching a specified query.
+- ESummary retrieves publication metadata using PubMed article IDs.
+- The `retmode=json` parameter requests JSON-formatted responses.
+- URLSearchParams makes it easier to construct API request URLs.
+
+### Fetch and Asynchronous JavaScript
+- Fetch allows React to communicate with external APIs.
+- Async/await makes asynchronous API requests easier to manage.
+- Response.ok can be used to check whether an HTTP request succeeded.
+- JSON responses are converted into JavaScript objects using response.json().
+- Multiple API requests can be chained together to retrieve related information.
+
+### VitalLog Implementation
+- Replaced the mocked research feed with live PubMed search results.
+- Added search functionality for nutrition, exercise, and sleep research.
+- Displayed article titles, authors, journals, and publication dates.
+- Added direct links to the original PubMed records.
+- Added loading and error states to improve the user experience.
+
+## Backend Application Endpoints
+
+- Express provides application-specific API endpoints.
+- GET retrieves information from the backend.
+- POST sends new data to the backend.
+- DELETE removes existing data.
+- Authentication middleware protects application endpoints.
+- UUID generates unique identifiers for health entries.
+- Backend filtering associates each entry with its authenticated user.
+- Fetch allows React to interact with the backend using HTTP requests.
+
 ## General Notes
 I love web programming!
