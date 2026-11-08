@@ -8,23 +8,32 @@ import { Login } from './login/login.jsx';
 import { Dashboard } from './dashboard/dashboard.jsx';
 import { Articles } from './articles/articles.jsx';
 import { Friends } from './friends/friends.jsx';
-import {
-  readStorage,
-  removeStorage,
-  STORAGE_KEYS,
-  writeStorage,
-} from './lib/storage.js';
 
 export default function App() {
-  const [user, setUser] = useState(() => readStorage(STORAGE_KEYS.user, null));
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    if (user) {
-      writeStorage(STORAGE_KEYS.user, user);
-    } else {
-      removeStorage(STORAGE_KEYS.user);
+    async function checkAuthentication() {
+      try {
+        const response = await fetch('/api/profile', {
+          credentials: 'include',
+        });
+
+        if (!response.ok) {
+          setUser(null);
+          return;
+        }
+
+        const data = await response.json();
+        setUser(data);
+      } catch (error) {
+        console.error('Could not verify authentication:', error);
+        setUser(null);
+      }
     }
-  }, [user]);
+
+    checkAuthentication();
+  }, []);
 
   async function handleLogout() {
     try {
