@@ -120,26 +120,45 @@ export function Login({ user, onAuthenticate }) {
   }
 
 
+
   async function handleLogin(event) {
     event.preventDefault();
     setBusy(true);
     setMessage('');
+
     try {
-      const username = loginForm.username.trim();
-      const accounts = readStorage(STORAGE_KEYS.accounts, []);
-      const account = accounts.find((candidate) => candidate.username.toLowerCase() === username.toLowerCase());
-      if (!account) throw new Error('No local account was found. Create an account first in this browser.');
-      const passwordHash = await hashDemoPassword(loginForm.password);
-      if (passwordHash !== account.passwordHash) throw new Error('That password does not match this local demo account.');
-      onAuthenticate({ username: account.username, email: account.email });
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          username: loginForm.username.trim(),
+          password: loginForm.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.msg || 'Login failed.');
+      }
+
+      onAuthenticate({
+        username: data.username,
+        email: data.email,
+      });
+
       showMessage('You are signed in.');
       navigate('/dashboard');
     } catch (error) {
-      showMessage(error.message || 'Could not sign in to the demo account.', 'error');
+      showMessage(error.message || 'Could not sign in.', 'error');
     } finally {
       setBusy(false);
     }
   }
+
 
   const loginFields = [
     {
