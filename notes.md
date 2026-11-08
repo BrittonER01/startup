@@ -185,6 +185,32 @@ section:nth-child(2) { flex: 3; }
 - Vite expects the HTML entry point at the project root and the React JavaScript entry at `src/main.jsx`. Component imports should include exact file paths and extensions where used.
 - Browser dev tools are useful for catching import errors, inspecting localStorage, checking interval activity, and debugging component event handlers.
 
+## Backend Service Support
+Implemented a Node.js and Express backend for the health
+and fitness startup application.
+
+### Backend Functionality
+- Created an Express server running on port 4000.
+- Added authentication endpoints for registration, login,
+  and logout.
+- Implemented BCrypt password hashing.
+- Added UUID authentication tokens stored in HTTP-only cookies.
+- Created authentication middleware for protected endpoints.
+- Added application endpoints for saving, retrieving,
+  and deleting favorite nutritional facts.
+
+### Frontend Integration
+- Configured Vite to proxy API requests to port 4000.
+- Connected React login and registration forms to Express.
+- Added frontend fetch requests for protected endpoints.
+- Retained third-party nutritional information API integration.
+
+### Deployment
+- Replaced the previous deployment script with the
+  Simon Service deployment script.
+- Configured Express to serve the production frontend.
+- Deployed the application using the startup service name.
+
 ### NCBI E-utilities
 - PubMed provides access to scientific literature through the NCBI E-utilities API.
 - ESearch searches PubMed for articles matching a specified query.
@@ -216,6 +242,17 @@ section:nth-child(2) { flex: 3; }
 - UUID generates unique identifiers for health entries.
 - Backend filtering associates each entry with its authenticated user.
 - Fetch allows React to interact with the backend using HTTP requests.
+
+## Friends Backend Integration
+
+- Implemented authenticated endpoints for retrieving friends.
+- POST requests create new friend records.
+- PATCH requests update friend request status.
+- DELETE requests remove friend records.
+- React uses fetch to communicate with the Express API.
+- Friend records are associated with the authenticated username.
+- The friends interface now retrieves and updates data through
+  the backend instead of localStorage.
 
 ## General Notes
 I love web programming!

@@ -15,6 +15,7 @@ const port = process.argv.length > 2 ? process.argv[2] : 4000;
 let users = [];
 let favorites = [];
 let entries = [];
+let friends = [];
 
 // Middleware
 app.use(express.json());
@@ -135,6 +136,100 @@ const verifyAuth = async (req, res, next) => {
     });
   }
 };
+
+
+// Retrieve the authenticated user's friends.
+apiRouter.get('/friends', verifyAuth, (req, res) => {
+  const userFriends = friends.filter(
+    (friend) => friend.owner === req.user.username
+  );
+
+  res.send(userFriends);
+});
+
+// Add a friend.
+apiRouter.post('/friends', verifyAuth, (req, res) => {
+  const username = req.body.username?.trim().replace(/^@/, '').toLowerCase();
+
+  if (!username || username.length < 2) {
+    return res.status(400).send({
+      msg: 'Enter a valid username',
+    });
+  }
+
+  if (username === req.user.username) {
+    return res.status(400).send({
+      msg: 'You cannot add yourself',
+    });
+  }
+
+  const existing = friends.some(
+    (friend) =>
+      friend.owner === req.user.username &&
+      friend.username === username
+  );
+
+  if (existing) {
+    return res.status(409).send({
+      msg: 'Friend already exists',
+    });
+  }
+
+  const name = username
+    .replace(/[._-]+/g, ' ')
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+
+  const friend = {
+    id: uuid.v4(),
+    owner: req.user.username,
+    username,
+    name,
+    status: 'pending',
+  };
+
+  friends.push(friend);
+
+  res.status(201).send(friend);
+});
+
+// Accept a friend request.
+apiRouter.patch('/friends/:id', verifyAuth, (req, res) => {
+  const friend = friends.find(
+    (item) =>
+      item.id === req.params.id &&
+      item.owner === req.user.username
+  );
+
+  if (!friend) {
+    return res.status(404).send({
+      msg: 'Friend request not found',
+    });
+  }
+
+  friend.status = 'friend';
+
+  res.send(friend);
+});
+
+// Remove a friend.
+apiRouter.delete('/friends/:id', verifyAuth, (req, res) => {
+  const index = friends.findIndex(
+    (friend) =>
+      friend.id === req.params.id &&
+      friend.owner === req.user.username
+  );
+
+  if (index === -1) {
+    return res.status(404).send({
+      msg: 'Friend not found',
+    });
+  }
+
+  friends.splice(index, 1);
+
+  res.status(204).end();
+});
+
 
 // Retrieve health entries belonging to the authenticated user.
 apiRouter.get('/entries', verifyAuth, (req, res) => {
