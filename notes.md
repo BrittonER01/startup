@@ -30,6 +30,11 @@ Command for deploying React:
 ./deployReact.sh -k ~/CS260/DoNotCommit/MasterKey.pem -h vitallog.click -s startup
 ```
 
+Command for deploying Service:
+```
+./deployService.sh -k ~/CS260/DoNotCommit/MasterKey.pem -h vitallog.click -s simon/startup
+```
+
 ## HTML
 
 Interesting things I have learned about HTML
