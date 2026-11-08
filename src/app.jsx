@@ -26,8 +26,21 @@ export default function App() {
     }
   }, [user]);
 
-  function handleLogout() {
-    setUser(null);
+  async function handleLogout() {
+    try {
+      const response = await fetch('/api/auth/logout', {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        throw new Error('Logout failed.');
+      }
+
+      setUser(null);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
