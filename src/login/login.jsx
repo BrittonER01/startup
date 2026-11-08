@@ -1,6 +1,5 @@
 import { Fragment, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { hashDemoPassword, readStorage, STORAGE_KEYS, writeStorage } from '../lib/storage.js';
 
 function AuthForm({
   title,
@@ -80,32 +79,46 @@ export function Login({ user, onAuthenticate }) {
     clearMessage();
   }
 
+
   async function handleRegister(event) {
     event.preventDefault();
     setBusy(true);
     setMessage('');
+
     try {
-      const username = registerForm.username.trim();
-      const email = registerForm.email.trim().toLowerCase();
-      if (username.length < 3) throw new Error('Choose a username with at least 3 characters.');
-      if (registerForm.password.length < 6) throw new Error('Use a demo password with at least 6 characters.');
-      const accounts = readStorage(STORAGE_KEYS.accounts, []);
-      if (accounts.some((account) => account.username.toLowerCase() === username.toLowerCase())) {
-        throw new Error('That username is already registered in this browser.');
+      const response = await fetch('/api/auth/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          username: registerForm.username.trim(),
+          email: registerForm.email.trim().toLowerCase(),
+          password: registerForm.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.msg || 'Registration failed.');
       }
-      const passwordHash = await hashDemoPassword(registerForm.password);
-      const nextAccounts = [...accounts, { username, email, passwordHash }];
-      if (!writeStorage(STORAGE_KEYS.accounts, nextAccounts)) throw new Error('Browser storage is unavailable. Check your browser privacy settings.');
-      const nextUser = { username, email };
-      onAuthenticate(nextUser);
-      showMessage('Account created. You are now signed in on this browser.');
+
+      onAuthenticate({
+        username: data.username,
+        email: data.email,
+      });
+
+      showMessage('Account created. You are now signed in.');
       navigate('/dashboard');
     } catch (error) {
-      showMessage(error.message || 'Could not create this demo account.', 'error');
+      showMessage(error.message || 'Could not create your account.', 'error');
     } finally {
       setBusy(false);
     }
   }
+
 
   async function handleLogin(event) {
     event.preventDefault();
