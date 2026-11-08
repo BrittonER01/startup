@@ -1,5 +1,6 @@
 import { Fragment, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { API } from '../lib/api.js';
 
 function AuthForm({
   title,
@@ -86,7 +87,7 @@ export function Login({ user, onAuthenticate }) {
     setMessage('');
 
     try {
-      const response = await fetch('/api/auth/create', {
+      const response = await fetch(API.auth.create, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -127,7 +128,7 @@ export function Login({ user, onAuthenticate }) {
     setMessage('');
 
     try {
-      const response = await fetch('/api/auth/login', {
+      const response = await fetch(API.auth.login, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

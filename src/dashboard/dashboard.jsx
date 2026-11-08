@@ -5,6 +5,7 @@ import {
   todayISO,
   TYPE_LABELS,
 } from '../lib/storage.js';
+import { API } from '../lib/api.js';
 
 const CATEGORY_ORDER = ['sleep', 'exercise', 'nutrition'];
 const BAR_LIMITS = { sleep: 12, exercise: 120, nutrition: 3000 };
@@ -23,7 +24,7 @@ export function Dashboard({ user }) {
 
     async function fetchEntries() {
       try {
-        const response = await fetch('/api/entries', {
+        const response = await fetch(API.entries.list, {
           credentials: 'include',
           signal: controller.signal,
         });
@@ -89,7 +90,7 @@ export function Dashboard({ user }) {
     setSavingEntry(true);
 
     try {
-      const response = await fetch('/api/entries', {
+      const response = await fetch(API.entries.create, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -132,7 +133,7 @@ export function Dashboard({ user }) {
 
   async function removeEntry(id) {
     try {
-      const response = await fetch(`/api/entries/${id}`, {
+      const response = await fetch(API.entries.byId(id), {
         method: 'DELETE',
         credentials: 'include',
       });

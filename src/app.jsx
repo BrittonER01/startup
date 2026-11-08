@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { API } from './lib/api.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.css';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
@@ -15,7 +16,7 @@ export default function App() {
   useEffect(() => {
     async function checkAuthentication() {
       try {
-        const response = await fetch('/api/profile', {
+        const response = await fetch(API.profile, {
           credentials: 'include',
         });
 
@@ -37,7 +38,7 @@ export default function App() {
 
   async function handleLogout() {
     try {
-      const response = await fetch('/api/auth/logout', {
+      const response = await fetch(API.auth.logout, {
         method: 'DELETE',
         credentials: 'include',
       });

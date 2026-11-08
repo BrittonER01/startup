@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { API } from '../lib/api.js';
 import {
   INITIAL_ACTIVITY,
   MOCK_ACTIVITY_EVENTS,
@@ -28,7 +29,7 @@ export function Friends({ user }) {
 
     async function fetchFriends() {
       try {
-        const response = await fetch('/api/friends', {
+        const response = await fetch(API.friends.list, {
           credentials: 'include',
           signal: controller.signal,
         });
@@ -95,7 +96,7 @@ export function Friends({ user }) {
     }
 
     try {
-      const response = await fetch('/api/friends', {
+      const response = await fetch(API.friends.create, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -124,7 +125,7 @@ export function Friends({ user }) {
 
   async function acceptRequest(id) {
     try {
-      const response = await fetch(`/api/friends/${id}`, {
+      const response = await fetch(API.friends.byId(id), {
         method: 'PATCH',
         credentials: 'include',
       });
@@ -150,7 +151,7 @@ export function Friends({ user }) {
 
   async function removeFriend(id) {
     try {
-      const response = await fetch(`/api/friends/${id}`, {
+      const response = await fetch(API.friends.byId(id), {
         method: 'DELETE',
         credentials: 'include',
       });
