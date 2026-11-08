@@ -34,14 +34,21 @@ const cookieOptions = {
   maxAge: 1000 * 60 * 60 * 24,
 };
 
-// Registration
 apiRouter.post('/auth/create', async (req, res) => {
   const username = req.body.username?.trim().toLowerCase();
+  const email = req.body.email?.trim().toLowerCase();
   const password = req.body.password;
 
-  if (!username || !password || username.length < 3 || password.length < 6) {
+  if (
+    !username ||
+    !email ||
+    !email.includes('@') ||
+    !password ||
+    username.length < 3 ||
+    password.length < 6
+  ) {
     return res.status(400).send({
-      msg: 'Username or password is invalid',
+      msg: 'Username, email, or password is invalid',
     });
   }
 
@@ -51,12 +58,19 @@ apiRouter.post('/auth/create', async (req, res) => {
     });
   }
 
-  const user = await createUser(username, password);
+  if (await findUser('email', email)) {
+    return res.status(409).send({
+      msg: 'Email already registered',
+    });
+  }
+
+  const user = await createUser(username, email, password);
 
   setAuthCookie(res, user.token);
 
   res.status(201).send({
     username: user.username,
+    email: user.email,
   });
 });
 
