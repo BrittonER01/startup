@@ -139,6 +139,7 @@ const verifyAuth = async (req, res, next) => {
 apiRouter.get('/profile', verifyAuth, (req, res) => {
   res.send({
     username: req.user.username,
+    email: req.user.email,
   });
 });
 
@@ -214,11 +215,12 @@ app.use((_req, res) => {
 });
 
 // Create a user with a hashed password.
-async function createUser(username, password) {
+async function createUser(username, email, password) {
   const passwordHash = await bcrypt.hash(password, 10);
 
   const user = {
     username,
+    email,
     password: passwordHash,
     token: uuid.v4(),
   };
