@@ -67,7 +67,7 @@ export default function App() {
         <footer>
           <p>&copy; 2026 Brit Richardson — CS 260 Startup Project</p>
           <p><a href="https://github.com/BrittonER01/startup" target="_blank" rel="noopener noreferrer">View the VitalLog GitHub repository</a></p>
-          <p className="footer-note">Classroom prototype: account, health, and friend data are stored in this browser only.</p>
+          <p className="footer-note">Classroom prototype</p>
         </footer>
       </div>
     </BrowserRouter>

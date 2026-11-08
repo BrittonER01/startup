@@ -24,7 +24,7 @@ export function Home({ user }) {
             <Link className="button-link" to="/dashboard">Log today's habits</Link>
             <Link className="text-link" to="/articles">Explore research <span aria-hidden="true">→</span></Link>
           </div>
-          <p className="welcome-note">{user ? `Welcome back, ${user.username}. Your demo session is active on this browser.` : 'Explore the demo, or register a local account to personalize your session.'}</p>
+          <p className="welcome-note">{user ? `Welcome back, ${user.username}. Your demo session is active on this browser.` : 'Explore the demo, or register an account to personalize your session.'}</p>
         </div>
         <aside className="vitals-panel col-lg-5" aria-label="VitalLog at a glance">
           <h3>Your VitalLog at a glance</h3>
@@ -45,7 +45,7 @@ export function Home({ user }) {
 
       <section className="card source-card">
         <h2>Built for CS 260</h2>
-        <p>Created by <strong>Brit Richardson</strong>. VitalLog is being developed as a React startup project with interactive mock functionality.</p>
+        <p>Created by <strong>Brit Richardson</strong>. VitalLog is being developed as a React startup project with interactive functionality.</p>
         <p className="source-link"><a href="https://github.com/BrittonER01/startup" target="_blank" rel="noopener noreferrer">github.com/BrittonER01/startup</a></p>
       </section>
     </main>

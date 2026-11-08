@@ -227,7 +227,6 @@ export function Login({ user, onAuthenticate }) {
         <section className="card auth-current">
           <p className="eyebrow">LOCAL DEMO SESSION</p>
           <h2>Welcome back, {user.username}</h2>
-          <p>You are currently signed in on this browser. Your sample data stays local to this browser and is not synced to a server.</p>
           {message && <p className={`notice notice-${messageKind}`} role="status">{message}</p>}
           <Link className="button-link" to="/dashboard">Go to your dashboard</Link>
         </section>
@@ -240,7 +239,6 @@ export function Login({ user, onAuthenticate }) {
       <section className="page-intro">
         <p className="eyebrow">MAKE IT YOURS</p>
         <h2>Welcome to VitalLog</h2>
-        <p>Create a demo account or sign in to personalize the session. This is a client-only prototype, not production authentication.</p>
       </section>
       {message && <p className={`notice notice-${messageKind}`} role="status" aria-live="polite">{message}</p>}
       <div className="form-grid row g-4">
@@ -264,7 +262,6 @@ export function Login({ user, onAuthenticate }) {
           />
         </section>
       </div>
-      <p className="small-print">Do not use a real password. The browser hash and local account list are only for demonstrating UI state; a real app needs server-side identity, authorization, and secure storage.</p>
     </main>
   );
 }
