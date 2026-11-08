@@ -1,52 +1,234 @@
-import { useEffect, useMemo, useState } from 'react';
-import { SAMPLE_ARTICLES } from '../data/demoData.js';
+import { useEffect, useState } from 'react';
+
+// Search PubMed and retrieve matching article IDs.
+async function searchPubMed(searchTerm, signal) {
+  const searchParams = new URLSearchParams({
+    db: 'pubmed',
+    term: searchTerm,
+    retmax: '4',
+    sort: 'pub_date',
+    retmode: 'json',
+  });
+
+  const searchResponse = await fetch(
+    `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?${searchParams}`,
+    { signal }
+  );
+
+  if (!searchResponse.ok) {
+    throw new Error('Unable to search PubMed.');
+  }
+
+  const searchData = await searchResponse.json();
+
+  const ids = searchData.esearchresult?.idlist ?? [];
+
+  if (ids.length === 0) {
+    return [];
+  }
+
+  // Retrieve summaries for the returned article IDs.
+  const summaryParams = new URLSearchParams({
+    db: 'pubmed',
+    id: ids.join(','),
+    retmode: 'json',
+  });
+
+  const summaryResponse = await fetch(
+    `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?${summaryParams}`,
+    { signal }
+  );
+
+  if (!summaryResponse.ok) {
+    throw new Error('Unable to retrieve article information.');
+  }
+
+  const summaryData = await summaryResponse.json();
+
+  return ids.map((id) => {
+    const article = summaryData.result[id];
+
+    const authors = article.authors
+      ?.slice(0, 3)
+      .map((author) => author.name)
+      .join(', ');
+
+    return {
+      id,
+      title: article.title,
+      journal: article.fulljournalname || article.source,
+      year: article.pubdate,
+      authors: authors || 'Authors not listed',
+      url: `https://pubmed.ncbi.nlm.nih.gov/${id}/`,
+    };
+  });
+}
 
 export function Articles() {
-  const [query, setQuery] = useState('');
-  const [articles, setArticles] = useState([]);
-  const [refreshedAt, setRefreshedAt] = useState(null);
-  const [showNotice, setShowNotice] = useState(false);
+  const [query, setQuery] = useState(
+    'nutrition OR exercise OR sleep'
+  );
 
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  async function loadArticles(searchTerm, signal) {
+    setLoading(true);
+    setError('');
+
+    try {
+      const results = await searchPubMed(searchTerm, signal);
+
+      setArticles(results);
+    } catch (error) {
+      // Ignore requests intentionally cancelled by React.
+      if (error.name === 'AbortError') {
+        return;
+      }
+
+      console.error('PubMed API error:', error);
+      setError(error.message || 'Something went wrong.');
+      setArticles([]);
+    } finally {
+      if (!signal?.aborted) {
+        setLoading(false);
+      }
+    }
+  }
+
+  // Load recent research when the component first opens.
   useEffect(() => {
-    // Mock the future NCBI E-utilities request with predictable local sample records.
-    setArticles(SAMPLE_ARTICLES);
-    setRefreshedAt(new Date());
+    const controller = new AbortController();
+
+    loadArticles(
+      'nutrition OR exercise OR sleep',
+      controller.signal
+    );
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
-  const filteredArticles = useMemo(() => {
-    const cleanQuery = query.trim().toLowerCase();
-    if (!cleanQuery) return articles;
-    return articles.filter((article) => `${article.title} ${article.summary} ${article.terms}`.toLowerCase().includes(cleanQuery));
-  }, [articles, query]);
+  function handleSearch(event) {
+    event.preventDefault();
 
-  function refreshSamples() {
-    setArticles([...SAMPLE_ARTICLES].sort(() => Math.random() - 0.5));
-    setRefreshedAt(new Date());
-    setShowNotice(true);
+    const searchTerm = query.trim();
+
+    if (!searchTerm) {
+      setError('Please enter a research topic.');
+      return;
+    }
+
+    loadArticles(searchTerm);
   }
 
   return (
     <main className="container body">
+
       <section className="page-intro research-intro">
         <p className="eyebrow">EVIDENCE, NOT GUESSWORK</p>
-        <h2>Fitness &amp; nutrition research</h2>
-        <p>Search sample research topics and open a matching query on PubMed. The card content is mocked for this deliverable; later, it can be replaced by live NCBI E-utilities responses.</p>
+
+        <h2>Fitness &amp; Nutrition Research</h2>
+
+        <p>
+          Explore recent scientific publications covering
+          nutrition, exercise, sleep, and health.
+          Research results are retrieved directly from PubMed.
+        </p>
       </section>
-      <section className="research-tools" aria-label="Research feed controls">
-        <div className="research-search"><label htmlFor="article-search">Search topics</label><input id="article-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Try sleep, exercise, nutrition…" /></div>
-        <button type="button" className="button-quiet" onClick={refreshSamples}>Refresh sample feed</button>
+
+      <section className="research-tools" aria-label="Research search">
+        <form onSubmit={handleSearch} className="research-search">
+
+          <label htmlFor="article-search">
+            Search research topics
+          </label>
+
+          <input
+            id="article-search"
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Try nutrition, exercise, or sleep..."
+          />
+
+          <button type="submit" disabled={loading}>
+            {loading ? 'Searching...' : 'Search PubMed'}
+          </button>
+
+        </form>
       </section>
-      <div className="research-meta" aria-live="polite">{showNotice ? 'Sample feed refreshed.' : 'Demo research topics'}{refreshedAt && ` · Last refreshed ${refreshedAt.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}`}</div>
-      {filteredArticles.length ? <div className="article-grid">{filteredArticles.map((article) => (
-        <article key={article.id} className="research-card">
-          <div className="article-topline"><span className="article-tag">{article.journal}</span><time dateTime={String(article.year)}>{article.year}</time></div>
-          <h3>{article.title}</h3>
-          <p className="article-journal">{article.journal}</p>
-          <p>{article.summary}</p>
-          <a href={`https://pubmed.ncbi.nlm.nih.gov/?term=${encodeURIComponent(article.query)}`} target="_blank" rel="noopener noreferrer">Find related papers on PubMed <span aria-hidden="true">↗</span></a>
-        </article>
-      ))}</div> : <div className="empty-state"><h3>No sample topics found</h3><p>Try a broader search such as “health” or clear the search field.</p><button type="button" className="button-text" onClick={() => setQuery('')}>Clear search</button></div>}
-      <p className="small-print research-disclaimer">The descriptions above are illustrative summaries, not abstracts of specific papers. Open PubMed to review actual research records.</p>
+
+      <div className="research-meta" aria-live="polite">
+        {loading
+          ? 'Retrieving research from PubMed...'
+          : `${articles.length} research articles found`}
+      </div>
+
+      {error && (
+        <div className="notice notice-error" role="alert">
+          {error}
+        </div>
+      )}
+
+      {loading && (
+        <p>Loading research articles...</p>
+      )}
+
+      {!loading && articles.length > 0 && (
+        <div className="article-grid">
+
+          {articles.map((article) => (
+            <article key={article.id} className="research-card">
+
+              <div className="article-topline">
+                <span className="article-tag">
+                  PubMed Research
+                </span>
+
+                <time>{article.year}</time>
+              </div>
+
+              <h3>{article.title}</h3>
+
+              <p className="article-journal">
+                {article.journal}
+              </p>
+
+              <p>
+                <strong>Authors:</strong> {article.authors}
+              </p>
+
+              <a
+                href={article.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Read article on PubMed
+                <span aria-hidden="true"> ↗</span>
+              </a>
+
+            </article>
+          ))}
+
+        </div>
+      )}
+
+      {!loading && !error && articles.length === 0 && (
+        <div className="empty-state">
+          <h3>No articles found</h3>
+          <p>Try searching for another research topic.</p>
+        </div>
+      )}
+
+      <p className="small-print research-disclaimer">
+        Article information is retrieved from the National
+        Library of Medicine's PubMed database. Availability
+        of full-text articles depends on the publication.
+      </p>
+
     </main>
   );
 }
