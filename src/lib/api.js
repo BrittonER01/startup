@@ -1,6 +1,8 @@
 export const API = {
   profile: '/api/profile',
 
+   research: '/api/research',
+
   auth: {
     create: '/api/auth/create',
     login: '/api/auth/login',

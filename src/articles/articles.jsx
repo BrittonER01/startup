@@ -1,68 +1,30 @@
 import { useEffect, useState } from 'react';
+import { API } from '../lib/api.js';
 
 // Search PubMed and retrieve matching article IDs.
+
+// Retrieve research articles through our Express backend.
 async function searchPubMed(searchTerm, signal) {
-  const searchParams = new URLSearchParams({
-    db: 'pubmed',
+  const params = new URLSearchParams({
     term: searchTerm,
-    retmax: '4',
-    sort: 'pub_date',
-    retmode: 'json',
   });
 
-  const searchResponse = await fetch(
-    `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?${searchParams}`,
+  const response = await fetch(
+    `${API.research}?${params}`,
     { signal }
   );
 
-  if (!searchResponse.ok) {
-    throw new Error('Unable to search PubMed.');
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      data.msg || 'Unable to retrieve research articles.'
+    );
   }
 
-  const searchData = await searchResponse.json();
-
-  const ids = searchData.esearchresult?.idlist ?? [];
-
-  if (ids.length === 0) {
-    return [];
-  }
-
-  // Retrieve summaries for the returned article IDs.
-  const summaryParams = new URLSearchParams({
-    db: 'pubmed',
-    id: ids.join(','),
-    retmode: 'json',
-  });
-
-  const summaryResponse = await fetch(
-    `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?${summaryParams}`,
-    { signal }
-  );
-
-  if (!summaryResponse.ok) {
-    throw new Error('Unable to retrieve article information.');
-  }
-
-  const summaryData = await summaryResponse.json();
-
-  return ids.map((id) => {
-    const article = summaryData.result[id];
-
-    const authors = article.authors
-      ?.slice(0, 3)
-      .map((author) => author.name)
-      .join(', ');
-
-    return {
-      id,
-      title: article.title,
-      journal: article.fulljournalname || article.source,
-      year: article.pubdate,
-      authors: authors || 'Authors not listed',
-      url: `https://pubmed.ncbi.nlm.nih.gov/${id}/`,
-    };
-  });
+  return data.articles ?? [];
 }
+
 
 export function Articles() {
   const [query, setQuery] = useState(

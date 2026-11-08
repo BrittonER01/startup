@@ -148,7 +148,7 @@ apiRouter.get('/friends', verifyAuth, (req, res) => {
 });
 
 // Add a friend.
-apiRouter.post('/friends', verifyAuth, (req, res) => {
+apiRouter.post('/friends', verifyAuth, async (req, res) => {
   const username = req.body.username?.trim().replace(/^@/, '').toLowerCase();
 
   if (!username || username.length < 2) {
@@ -160,6 +160,15 @@ apiRouter.post('/friends', verifyAuth, (req, res) => {
   if (username === req.user.username) {
     return res.status(400).send({
       msg: 'You cannot add yourself',
+    });
+  }
+
+  // Verify that the requested user has an account.
+  const targetUser = await findUser('username', username);
+
+  if (!targetUser) {
+    return res.status(404).send({
+      msg: 'User not found',
     });
   }
 
@@ -175,9 +184,7 @@ apiRouter.post('/friends', verifyAuth, (req, res) => {
     });
   }
 
-  const name = username
-    .replace(/[._-]+/g, ' ')
-    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+  const name = targetUser.displayName || targetUser.username;
 
   const friend = {
     id: uuid.v4(),
@@ -246,16 +253,23 @@ apiRouter.post('/entries', verifyAuth, (req, res) => {
 
   const validTypes = ['sleep', 'exercise', 'nutrition'];
 
+  const MAX_ENTRY_AMOUNTS = {
+    sleep: 24,
+    exercise: 1440,
+    nutrition: 10000,
+  };
+
   if (
     !validTypes.includes(type) ||
     !Number.isFinite(amount) ||
     amount <= 0 ||
+    amount > MAX_ENTRY_AMOUNTS[type] ||
     typeof date !== 'string' ||
     !/^\d{4}-\d{2}-\d{2}$/.test(date) ||
     (notes !== undefined && typeof notes !== 'string')
   ) {
     return res.status(400).send({
-      msg: 'Invalid health entry',
+      msg: 'Invalid health entry amount or information',
     });
   }
 
@@ -350,6 +364,103 @@ apiRouter.delete('/favorites/:id', verifyAuth, (req, res) => {
 
   res.status(204).end();
 });
+
+
+// Search PubMed through the backend.
+apiRouter.get('/research', async (req, res) => {
+  const term = typeof req.query.term === 'string'
+    ? req.query.term.trim()
+    : '';
+
+  if (!term || term.length > 200) {
+    return res.status(400).send({
+      msg: 'Enter a valid research search term.',
+    });
+  }
+
+  try {
+    // Search PubMed for article IDs.
+    const searchParams = new URLSearchParams({
+      db: 'pubmed',
+      term,
+      retmax: '4',
+      sort: 'pub_date',
+      retmode: 'json',
+    });
+
+    // Optionally use an NCBI API key stored on the server.
+    if (process.env.NCBI_API_KEY) {
+      searchParams.set('api_key', process.env.NCBI_API_KEY);
+    }
+
+    const searchResponse = await fetch(
+      `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?${searchParams}`
+    );
+
+    if (!searchResponse.ok) {
+      return res.status(502).send({
+        msg: 'PubMed search is currently unavailable.',
+      });
+    }
+
+    const searchData = await searchResponse.json();
+    const ids = searchData.esearchresult?.idlist ?? [];
+
+    if (ids.length === 0) {
+      return res.send({ articles: [] });
+    }
+
+    // Retrieve summaries for the article IDs.
+    const summaryParams = new URLSearchParams({
+      db: 'pubmed',
+      id: ids.join(','),
+      retmode: 'json',
+    });
+
+    if (process.env.NCBI_API_KEY) {
+      summaryParams.set('api_key', process.env.NCBI_API_KEY);
+    }
+
+    const summaryResponse = await fetch(
+      `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?${summaryParams}`
+    );
+
+    if (!summaryResponse.ok) {
+      return res.status(502).send({
+        msg: 'Unable to retrieve PubMed article information.',
+      });
+    }
+
+    const summaryData = await summaryResponse.json();
+
+    // Format the results for the React frontend.
+    const articles = ids.map((id) => {
+      const article = summaryData.result[id];
+
+      return {
+        id,
+        title: article.title,
+        journal: article.fulljournalname || article.source,
+        year: article.pubdate,
+        authors: article.authors
+          ?.slice(0, 3)
+          .map((author) => author.name)
+          .join(', ') || 'Authors not listed',
+        url: `https://pubmed.ncbi.nlm.nih.gov/${id}/`,
+      };
+    });
+
+    res.send({ articles });
+
+  } catch (error) {
+    console.error('PubMed API error:', error);
+
+    res.status(502).send({
+      msg: 'Unable to retrieve research articles.',
+    });
+  }
+});
+
 
 // Return JSON for unknown API endpoints.
 app.use('/api', (_req, res) => {
