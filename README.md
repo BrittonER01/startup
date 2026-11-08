@@ -155,7 +155,7 @@ For this deliverable I implemented backend service support for VitalLog using No
 - [x] **Prerequisites** - Simon Service was deployed, the GitHub repository is linked on the application homepage, and I maintained a history of development commits.
 - [x] **Node.js/Express HTTP service** - Created a separate backend application in the `service` directory using Node.js and Express. The backend runs on port 4000.
 - [x] **Static middleware for frontend** - Configured Express static middleware to serve the production React application from the `public` directory after deployment.
-- [x] **Calls to third-party endpoints** - Integrated the NCBI PubMed E-utilities API into the Research Feed. The frontend uses ESearch to retrieve matching article IDs and ESummary to retrieve publication metadata.
+- [x] **Calls to third-party endpoints** - Integrated the NCBI PubMed E-utilities API through the Express backend. The Research Feed calls /api/research, which uses ESearch to retrieve matching PubMed article IDs and ESummary to retrieve publication metadata before returning formatted results to React.
 - [x] **Backend service endpoints** - Created application endpoints for managing health entries and friend connections, including retrieving, creating, accepting, and deleting records.
 - [x] **Frontend calls service endpoints** - Connected the React login, registration, logout, dashboard, and friends functionality to the Express backend using `fetch`.
 - [x] **Registration, login, logout, and restricted endpoint** - Implemented user registration, authentication, logout, and protected endpoints using authentication middleware and HTTP-only cookies.

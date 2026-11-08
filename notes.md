@@ -313,5 +313,90 @@ and fitness startup application.
 - The deployment script installs backend dependencies on the AWS server.
 - The PM2 process is restarted using the startup service name.
 
+## Express Backend Refactoring
+
+### Express Router
+
+- Express Router allows related API endpoints to be organized into separate JavaScript files rather than placing every endpoint in `index.js`.
+- Created separate route modules for authentication, health entries, friends, favorites, and PubMed research.
+- Each route module creates a router using `express.Router()` and exports it using `module.exports = router`.
+- The main Express application imports and mounts these routers using `app.use()`.
+- Routes are relative to their mounting path. For example, mounting the entries router at `/api/entries` means `router.get('/')` handles requests to `GET /api/entries`.
+- Separating routes improves code organization and makes future changes easier to manage.
+
+### CommonJS Modules
+
+- Node.js supports CommonJS modules, which use `require()` to import functionality and `module.exports` to export it.
+- `module.exports = router` allows another file to import an Express Router.
+- Shared functions can also be exported as properties of an object.
+
+For example:
+
+```javascript
+module.exports = {
+  verifyAuth,
+  findUser,
+};
+```
+
+Another file can import these functions using:
+
+```javascript
+const { verifyAuth, findUser } = require('../middleware/auth');
+```
+
+- When refactoring the Research route, I initially forgot to include `module.exports = router`. This caused Express to throw `TypeError: argument handler must be a function` because `app.use()` received an object instead of a router function.
+- Adding the missing export resolved the issue.
+
+### Shared Authentication Middleware
+
+- Middleware functions execute during the request-response cycle before the final route handler.
+- Moved authentication functionality into `service/middleware/auth.js`.
+- The `verifyAuth` middleware checks the authentication token stored in an HTTP-only cookie.
+- If the token matches a registered user, the middleware attaches the user to `req.user` and calls `next()`.
+- If authentication fails, the middleware returns HTTP 401.
+- Sharing middleware allows different route modules to protect endpoints without duplicating authentication logic.
+
+### Shared In-Memory Storage
+
+- Created `service/data/store.js` to hold temporary arrays for users, health entries, friends, and favorites.
+- Each route module imports the arrays it needs from the shared storage module.
+- Node.js caches CommonJS modules after loading them, so different route modules can reference the same arrays.
+- Changes made to an array in one route are visible to other routes using the same array.
+- This storage only persists while the Node.js process is running. Restarting the backend clears the data.
+- Persistent storage will be implemented using MongoDB during the database deliverable.
+
+### Backend PubMed Integration
+
+- Moved PubMed E-utilities requests from the React frontend into the Express backend.
+- React now sends requests to `GET /api/research?term=...`.
+- The Express endpoint performs ESearch to retrieve PubMed IDs and ESummary to retrieve publication metadata.
+- Express formats the article information into JSON before returning it to React.
+- This separates external API communication from frontend presentation logic.
+- Optional API credentials can remain on the backend rather than being exposed in frontend JavaScript.
+
+### Server-Side Validation
+
+- Added validation to ensure that users can only add friends whose usernames exist in the application.
+- The backend returns HTTP 404 when the requested friend does not exist.
+- Added category-specific health-entry limits: 24 hours of sleep, 1,440 minutes of exercise, and 10,000 kcal of nutrition.
+- The backend returns HTTP 400 when submitted health-entry data is invalid.
+- Server-side validation is important because frontend validation can be bypassed by sending requests directly to the API.
+
+### PM2 and Production Environment Variables
+
+- PM2 is a Node.js process manager that keeps the backend running after the terminal session closes.
+- The deployment script installs backend dependencies and restarts the application through PM2.
+- Updated the deployment command to:
+
+```bash
+NODE_ENV=production pm2 restart ${service} --update-env
+```
+
+- `NODE_ENV=production` sets the Node.js environment to production.
+- `--update-env` tells PM2 to update the running process with the environment variables supplied during the restart.
+- VitalLog uses `process.env.NODE_ENV === 'production'` to enable the `Secure` attribute on authentication cookies.
+- Updated the deployment script to copy the entire `service` directory structure so that nested route, middleware, and storage files are included in production.
+
 ## General Notes
 I love web programming!

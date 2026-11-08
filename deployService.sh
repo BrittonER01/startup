@@ -22,8 +22,7 @@ mkdir build
 npm install # make sure vite is installed so that we can bundle
 npm run build # build the React front end
 cp -rf dist build/public # move the React front end to the target distribution
-cp service/*.js build # move the back end service to the target distribution
-cp service/*.json build
+cp -rf service/. build/
 
 # Step 2
 printf "\n----> Clearing out previous distribution on the target\n"
@@ -42,7 +41,7 @@ ssh -i "$key" ubuntu@$hostname << ENDSSH
 bash -i
 cd services/${service}
 npm install
-pm2 restart ${service}
+NODE_ENV=production pm2 restart ${service} --update-env
 ENDSSH
 
 # Step 5
