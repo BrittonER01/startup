@@ -29,13 +29,13 @@ router.post('/create', async (req, res) => {
 
   if (await findUser('username', username)) {
     return res.status(409).send({
-      msg: 'Username already exists',
+      msg: 'Username or email is unavailable',
     });
   }
 
   if (await findUser('email', email)) {
     return res.status(409).send({
-      msg: 'Email already registered',
+      msg: 'Username or email is unavailable',
     });
   }
 
