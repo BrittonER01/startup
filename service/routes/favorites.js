@@ -1,22 +1,19 @@
 const express = require('express');
 const uuid = require('uuid');
 
-const { favorites } = require('../database');
+const DB = require('../database');
 const { verifyAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
 // Retrieve saved nutrition facts
-router.get('/', verifyAuth, (req, res) => {
-  const userFavorites = favorites.filter(
-    (favorite) => favorite.username === req.user.username
-  );
-
+router.get('/', verifyAuth, async (req, res) => {
+  const userFavorites = await DB.getFavorites(req.user.username);
   res.send(userFavorites);
 });
 
 // Save a nutrition fact
-router.post('/', verifyAuth, (req, res) => {
+router.post('/', verifyAuth, async (req, res) => {
   const fact = req.body.fact?.trim();
 
   if (!fact) {
@@ -32,26 +29,20 @@ router.post('/', verifyAuth, (req, res) => {
     createdAt: new Date().toISOString(),
   };
 
-  favorites.push(favorite);
+  await DB.addFavorite(favorite);
 
   res.status(201).send(favorite);
 });
 
 // Delete a saved nutrition fact
-router.delete('/:id', verifyAuth, (req, res) => {
-  const index = favorites.findIndex(
-    (favorite) =>
-      favorite.id === req.params.id &&
-      favorite.username === req.user.username
-  );
+router.delete('/:id', verifyAuth, async (req, res) => {
+  const result = await DB.removeFavorite(req.params.id, req.user.username);
 
-  if (index === -1) {
+  if (result.deletedCount === 0) {
     return res.status(404).send({
       msg: 'Favorite not found',
     });
   }
-
-  favorites.splice(index, 1);
 
   res.status(204).end();
 });
