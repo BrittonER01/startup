@@ -40,9 +40,9 @@ async function updateUserToken(username, token) {
   }
 }
 
-// --- Application Data Functions ---
-async function getEntries(username) {
-  return entryCollection.find({ username }).sort({ createdAt: -1 }).toArray();
+// --- Entries Functions ---
+function getEntries(username) {
+  return entryCollection.find({ username }).sort({ date: -1 }).toArray();
 }
 
 async function addEntry(entry) {
@@ -50,11 +50,12 @@ async function addEntry(entry) {
   return entry;
 }
 
-async function deleteEntry(id, username) {
+function deleteEntry(id, username) {
   return entryCollection.deleteOne({ id, username });
 }
 
-async function getFavorites(username) {
+// --- Favorites Functions ---
+function getFavorites(username) {
   return favoriteCollection.find({ username }).toArray();
 }
 
@@ -63,12 +64,17 @@ async function addFavorite(favorite) {
   return favorite;
 }
 
-async function removeFavorite(id, username) {
+function removeFavorite(id, username) {
   return favoriteCollection.deleteOne({ id, username });
 }
 
-async function getFriends(username) {
-  return friendCollection.find({ username }).toArray();
+// --- Friends Functions ---
+function getFriends(owner) {
+  return friendCollection.find({ owner }).toArray();
+}
+
+function getFriendByUsername(owner, username) {
+  return friendCollection.findOne({ owner, username });
 }
 
 async function addFriend(friend) {
@@ -76,8 +82,16 @@ async function addFriend(friend) {
   return friend;
 }
 
-async function removeFriend(friendUsername, username) {
-  return friendCollection.deleteOne({ friendUsername, username });
+async function acceptFriend(id, owner) {
+  return friendCollection.findOneAndUpdate(
+    { id, owner },
+    { $set: { status: 'friend' } },
+    { returnDocument: 'after' }
+  );
+}
+
+function removeFriend(id, owner) {
+  return friendCollection.deleteOne({ id, owner });
 }
 
 module.exports = {
@@ -91,6 +105,8 @@ module.exports = {
   addFavorite,
   removeFavorite,
   getFriends,
+  getFriendByUsername,
   addFriend,
+  acceptFriend,
   removeFriend,
 };
