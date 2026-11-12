@@ -410,5 +410,12 @@ NODE_ENV=production pm2 restart ${service} --update-env
 - VitalLog uses `process.env.NODE_ENV === 'production'` to enable the `Secure` attribute on authentication cookies.
 - Updated the deployment script to copy the entire `service` directory structure so that nested route, middleware, and storage files are included in production.
 
+## DB & Authentication Deliverable Notes
+
+- **MongoDB Connection & Collections (`service/database.js`):** Learned how to connect an Express backend to MongoDB Atlas using `MongoClient` and keep credentials out of version control by storing them in `dbConfig.json` (listed in `.gitignore`) and copying them during deployment via `deployService.sh`.
+- **Async Refactoring:** Replacing in-memory JavaScript arrays with MongoDB queries required converting route handlers and auth helpers (`startSession`, `endSession`, `verifyAuth`) to `async`/`await` functions and checking `deletedCount` on `deleteOne` operations.
+- **Password Hashing & Session Tokens:** Used `bcryptjs` to hash passwords before inserting user documents into the `user` collection, and stored UUID session tokens on the user record paired with `httpOnly` cookies (`secure: process.env.NODE_ENV === 'production'`) so authentication works both on `http://localhost` during VS Code debugging and over HTTPS in production.
+- **Debugging & Verification:** Used VS Code's JavaScript Debug Terminal and browser DevTools (Network & Application tabs) to inspect `/api/auth` cookies and verify that user entries, favorites, and friends persist in MongoDB across Node server restarts.
+
 ## General Notes
 I love web programming!

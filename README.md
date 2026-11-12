@@ -165,9 +165,9 @@ For this deliverable I implemented backend service support for VitalLog using No
 
 For this deliverable I did the following. I checked the box `[x]` and added a description for things I completed.
 
-- [ ] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
-- [ ] **Stores data in MongoDB** - I did not complete this part of the deliverable.
-- [ ] **Stores credentials in MongoDB** - I did not complete this part of the deliverable.
+- [x] I completed the prerequisites for this deliverable (Simon deployed, GitHub link, Git commits)
+- [x] **Stores data in MongoDB** - Replaced temporary in-memory arrays (`service/data/store.js`) with a MongoDB Atlas database module (`service/database.js`) connected to the `startup` database. Added persistent CRUD operations across dedicated collections (`entry`, `favorite`, and `friend`) so authenticated users can create, retrieve, update, and delete health entries (sleep, exercise, nutrition), saved nutrition facts, and friend connections across server restarts.
+- [x] **Stores credentials in MongoDB** - Implemented persistent user registration, login, and logout backed by the MongoDB `user` collection. Passwords are salted and hashed with `bcryptjs` prior to storage, session tokens are generated with `uuid` and stored in `httpOnly` cookies via `cookie-parser`, and restricted API endpoints (`/api/entries`, `/api/favorites`, `/api/friends`, `/api/profile`) enforce authorization using the `verifyAuth` middleware.
 
 ## 🚀 WebSocket deliverable
 
