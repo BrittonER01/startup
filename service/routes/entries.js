@@ -1,22 +1,19 @@
 const express = require('express');
 const uuid = require('uuid');
 
-const { entries } = require('../database');
+const DB = require('../database');
 const { verifyAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
 // Retrieve health entries belonging to the authenticated user.
-router.get('/', verifyAuth, (req, res) => {
-  const userEntries = entries
-    .filter((entry) => entry.username === req.user.username)
-    .sort((a, b) => b.date.localeCompare(a.date));
-
+router.get('/', verifyAuth, async (req, res) => {
+  const userEntries = await DB.getEntries(req.user.username);
   res.send(userEntries);
 });
 
 // Save a new health entry.
-router.post('/', verifyAuth, (req, res) => {
+router.post('/', verifyAuth, async (req, res) => {
   const { type, amount, date, notes } = req.body;
 
   const validTypes = ['sleep', 'exercise', 'nutrition'];
@@ -50,26 +47,20 @@ router.post('/', verifyAuth, (req, res) => {
     notes: (notes || '').trim().slice(0, 240),
   };
 
-  entries.push(entry);
+  await DB.addEntry(entry);
 
   res.status(201).send(entry);
 });
 
 // Delete a health entry.
-router.delete('/:id', verifyAuth, (req, res) => {
-  const index = entries.findIndex(
-    (entry) =>
-      entry.id === req.params.id &&
-      entry.username === req.user.username
-  );
+router.delete('/:id', verifyAuth, async (req, res) => {
+  const result = await DB.deleteEntry(req.params.id, req.user.username);
 
-  if (index === -1) {
+  if (result.deletedCount === 0) {
     return res.status(404).send({
       msg: 'Entry not found',
     });
   }
-
-  entries.splice(index, 1);
 
   res.status(204).end();
 });
