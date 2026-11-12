@@ -1,7 +1,6 @@
 const bcrypt = require('bcryptjs');
 const uuid = require('uuid');
-
-const { users } = require('../data/store');
+const DB = require('../database');
 
 const authCookieName = 'token';
 
@@ -14,14 +13,10 @@ const cookieOptions = {
 
 // Find a user by username, email, or token.
 async function findUser(field, value) {
-  if (!value) return null;
-
-  return users.find(
-    (user) => user[field] === value
-  ) || null;
+  return DB.getUserByField(field, value);
 }
 
-// Create a new user.
+// Create a new user in MongoDB.
 async function createUser(username, email, password) {
   const passwordHash = await bcrypt.hash(password, 10);
 
@@ -31,8 +26,7 @@ async function createUser(username, email, password) {
     password: passwordHash,
   };
 
-  users.push(user);
-
+  await DB.addUser(user);
   return user;
 }
 
@@ -41,19 +35,18 @@ function setAuthCookie(res, token) {
   res.cookie(authCookieName, token, cookieOptions);
 }
 
-function startSession(res, user) {
-  user.token = uuid.v4();
-  setAuthCookie(res, user.token);
+async function startSession(res, user) {
+  const token = uuid.v4();
+  user.token = token;
+  await DB.updateUserToken(user.username, token);
+  setAuthCookie(res, token);
 }
 
 async function endSession(req, res) {
-  const user = await findUser(
-    'token',
-    req.cookies?.[authCookieName]
-  );
+  const user = await findUser('token', req.cookies?.[authCookieName]);
 
   if (user) {
-    delete user.token;
+    await DB.updateUserToken(user.username, null);
   }
 
   res.clearCookie(authCookieName, {
@@ -66,15 +59,10 @@ async function endSession(req, res) {
 // Protect endpoints.
 async function verifyAuth(req, res, next) {
   try {
-    const user = await findUser(
-      'token',
-      req.cookies[authCookieName]
-    );
+    const user = await findUser('token', req.cookies?.[authCookieName]);
 
     if (!user) {
-      return res.status(401).send({
-        msg: 'Unauthorized',
-      });
+      return res.status(401).send({ msg: 'Unauthorized' });
     }
 
     req.user = user;
