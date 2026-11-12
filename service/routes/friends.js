@@ -1,21 +1,14 @@
 const express = require('express');
 const uuid = require('uuid');
 
-const { friends } = require('../database');
-
-const {
-  verifyAuth,
-  findUser,
-} = require('../middleware/auth');
+const DB = require('../database');
+const { verifyAuth, findUser } = require('../middleware/auth');
 
 const router = express.Router();
 
 // Retrieve the authenticated user's friends.
-router.get('/', verifyAuth, (req, res) => {
-  const userFriends = friends.filter(
-    (friend) => friend.owner === req.user.username
-  );
-
+router.get('/', verifyAuth, async (req, res) => {
+  const userFriends = await DB.getFriends(req.user.username);
   res.send(userFriends);
 });
 
@@ -44,11 +37,7 @@ router.post('/', verifyAuth, async (req, res) => {
     });
   }
 
-  const existing = friends.some(
-    (friend) =>
-      friend.owner === req.user.username &&
-      friend.username === username
-  );
+  const existing = await DB.getFriendByUsername(req.user.username, username);
 
   if (existing) {
     return res.status(409).send({
@@ -66,45 +55,33 @@ router.post('/', verifyAuth, async (req, res) => {
     status: 'pending',
   };
 
-  friends.push(friend);
+  await DB.addFriend(friend);
 
   res.status(201).send(friend);
 });
 
 // Accept a friend request.
-router.patch('/:id', verifyAuth, (req, res) => {
-  const friend = friends.find(
-    (item) =>
-      item.id === req.params.id &&
-      item.owner === req.user.username
-  );
+router.patch('/:id', verifyAuth, async (req, res) => {
+  const updatedFriend = await DB.acceptFriend(req.params.id, req.user.username);
 
-  if (!friend) {
+  if (!updatedFriend) {
     return res.status(404).send({
       msg: 'Friend request not found',
     });
   }
 
-  friend.status = 'friend';
-
-  res.send(friend);
+  res.send(updatedFriend);
 });
 
 // Remove a friend.
-router.delete('/:id', verifyAuth, (req, res) => {
-  const index = friends.findIndex(
-    (friend) =>
-      friend.id === req.params.id &&
-      friend.owner === req.user.username
-  );
+router.delete('/:id', verifyAuth, async (req, res) => {
+  const result = await DB.removeFriend(req.params.id, req.user.username);
 
-  if (index === -1) {
+  if (result.deletedCount === 0) {
     return res.status(404).send({
       msg: 'Friend not found',
     });
   }
-
-  friends.splice(index, 1);
 
   res.status(204).end();
 });
