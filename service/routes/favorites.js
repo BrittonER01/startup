@@ -1,7 +1,7 @@
 const express = require('express');
 const uuid = require('uuid');
 
-const { favorites } = require('../data/store');
+const { favorites } = require('../database');
 const { verifyAuth } = require('../middleware/auth');
 
 const router = express.Router();

@@ -41,7 +41,7 @@ router.post('/create', async (req, res) => {
 
   const user = await createUser(username, email, password);
 
-  startSession(res, user);
+  await startSession(res, user);
 
   res.status(201).send({
     username: user.username,
@@ -61,7 +61,7 @@ router.post('/login', async (req, res) => {
     typeof password === 'string' &&
     await bcrypt.compare(password, user.password)
   ) {
-    startSession(res, user);
+    await startSession(res, user);
 
     return res.send({
       username: user.username,

@@ -1,7 +1,7 @@
 const express = require('express');
 const uuid = require('uuid');
 
-const { friends } = require('../data/store');
+const { friends } = require('../database');
 
 const {
   verifyAuth,
