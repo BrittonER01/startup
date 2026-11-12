@@ -55,13 +55,14 @@ required_files=(
     "service/index.js"
     "service/package.json"
     "service/package-lock.json"
+    "service/database.js"
+    "service/dbConfig.json"
     "service/routes/auth.js"
     "service/routes/entries.js"
     "service/routes/friends.js"
     "service/routes/favorites.js"
     "service/routes/research.js"
     "service/middleware/auth.js"
-    "service/data/store.js"
 )
 
 for file in "${required_files[@]}"; do
@@ -104,11 +105,12 @@ cp -r dist/. build/public/
 cp service/index.js build/
 cp service/package.json build/
 cp service/package-lock.json build/
+cp service/database.js build/
+cp service/dbConfig.json build/
 
 # Copy Express route modules and shared files.
 cp -r service/routes build/
 cp -r service/middleware build/
-cp -r service/data build/
 
 echo "Deployment package prepared."
 
@@ -172,13 +174,14 @@ npm ci --omit=dev
 # Verify required backend files.
 test -f index.js
 test -f package.json
+test -f database.js
+test -f dbConfig.json
 test -f routes/auth.js
 test -f routes/entries.js
 test -f routes/friends.js
 test -f routes/favorites.js
 test -f routes/research.js
 test -f middleware/auth.js
-test -f data/store.js
 
 echo "Backend dependencies installed successfully."
 ENDSSH

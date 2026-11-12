@@ -41,6 +41,18 @@ Command for deploying Service:
 ./deployService.sh -k ~/CS260/DoNotCommit/MasterKey.pem -h vitallog.click -s startup
 ```
 
+## Running Server Locally Steps
+In service dir run 
+```bash
+npm install
+node index.js
+```
+In another teminal in proj root directory run\
+```bash
+npm install
+npm run dev
+```
+
 ## HTML
 
 Interesting things I have learned about HTML
